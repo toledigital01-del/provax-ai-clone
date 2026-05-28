@@ -2,30 +2,17 @@
 @source "../src";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
-
-/*
- * Design system definition.
- *
- * The @theme inline block maps CSS custom properties to Tailwind utility
- * classes (e.g. --color-primary -> bg-primary, text-primary).
- *
- * The :root and .dark blocks define the actual color values using oklch.
- * All colors MUST use oklch format.
- *
- * To add a new semantic color:
- * 1. Add the variable to :root (light value) and .dark (dark value)
- * 2. Register it in @theme inline as --color-<name>: var(--<name>)
- */
+@theme {
+  --color-slate-150: #e2e8f0; /* Clear bright grey for text */
+  --color-slate-350: #cbd5e1; /* Elegant light-grey for secondary list items */
+  --color-slate-450: #94a3b8; /* Accessible dark grey for descriptors */
+}
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -61,84 +48,975 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+/* ==========================================
+   GLOBAL TYPOGRAPHY SCALE-UP FOR READABILITY
+   ========================================== */
+html {
+  font-size: 17px !important; /* Globally elevate base font matrix */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-size: 1rem !important;
+  line-height: 1.65 !important;
+}
+
+/* Elevate typical Tailwind size systems to be larger and visually balanced */
+.text-xs {
+  font-size: 0.9rem !important; /* Scaled from 12px to ~15.3px */
+}
+
+.text-sm {
+  font-size: 1.05rem !important; /* Scaled from 14px to ~17.8px */
+}
+
+.text-base {
+  font-size: 1.15rem !important; /* Scaled from 16px to ~19.5px */
+}
+
+.text-lg {
+  font-size: 1.3rem !important; /* Scaled from 18px to ~22px */
+}
+
+.text-xl {
+  font-size: 1.6rem !important; /* Scaled from 20px to ~27px */
+}
+
+.text-2xl {
+  font-size: 1.95rem !important; /* Scaled from 24px to ~33px */
+}
+
+.text-3xl {
+  font-size: 2.4rem !important; /* Scaled from 30px to ~41px */
+}
+
+.text-4xl {
+  font-size: 3rem !important;
+}
+
+.text-5xl {
+  font-size: 3.8rem !important;
+}
+
+.text-6xl {
+  font-size: 4.6rem !important;
+}
+
+/* Direct targeted overrides for inline hardcoded sizes across all views */
+.text-\[8px\], .text-\[9px\], .text-\[10px\], .text-\[10\.5px\], .text-\[11px\], .text-\[12px\], .text-\[12\.5px\] {
+  font-size: 0.9rem !important; /* Upscale tiny technical metadata fonts */
+}
+
+/* Global Reset & Elegant Transitions */
+* {
+  transition: background-color 0.22s cubic-bezier(0.4, 0, 0.2, 1), 
+              border-color 0.22s cubic-bezier(0.4, 0, 0.2, 1), 
+              box-shadow 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Operational PRF Light Theme Overrides - High Contrast Premium Palette */
+.light-theme {
+  background-color: #f8fafc !important; /* slate-50 background */
+  color: #0f172a !important;
+}
+
+/* Background utilities */
+.light-theme .bg-slate-950 {
+  background-color: #f1f5f9 !important; /* slate-100 */
+}
+.light-theme .bg-slate-900 {
+  background-color: #ffffff !important; /* pure white cards */
+}
+.light-theme .bg-slate-850,
+.light-theme .bg-slate-850\/60,
+.light-theme .bg-slate-800 {
+  background-color: #ffffff !important; /* Premium clean white */
+}
+.light-theme .hover\:bg-slate-800:hover,
+.light-theme .hover\:bg-slate-850:hover,
+.light-theme .hover\:bg-slate-900:hover {
+  background-color: #f1f5f9 !important; /* slate-100 premium hover */
+}
+.light-theme .hover\:bg-slate-900\/50:hover,
+.light-theme .hover\:bg-slate-800\/50:hover {
+  background-color: #f1f5f9 !important; /* slate-100 */
+}
+
+/* Transparent and translucent backgrounds override to eliminate gray-on-gray issues */
+.light-theme .bg-slate-950\/10,
+.light-theme .bg-slate-950\/20,
+.light-theme .bg-slate-950\/30,
+.light-theme .bg-slate-950\/40,
+.light-theme .bg-slate-950\/55,
+.light-theme .bg-slate-950\/60,
+.light-theme .bg-slate-950\/80 {
+  background-color: #f8fafc !important; /* soft solid background */
+  color: #0f172a !important;
+}
+.light-theme .bg-slate-900\/10,
+.light-theme .bg-slate-900\/20,
+.light-theme .bg-slate-900\/30,
+.light-theme .bg-slate-900\/40,
+.light-theme .bg-slate-900\/55,
+.light-theme .bg-slate-900\/60,
+.light-theme .bg-slate-900\/80 {
+  background-color: #ffffff !important; /* pure solid white cards */
+  color: #0f172a !important;
+}
+.light-theme .bg-slate-800\/10,
+.light-theme .bg-slate-800\/20,
+.light-theme .bg-slate-800\/40,
+.light-theme .bg-slate-800\/50,
+.light-theme .bg-slate-800\/60,
+.light-theme .bg-slate-800\/80 {
+  background-color: #ffffff !important; /* pure solid white cards */
+  color: #0f172a !important;
+}
+
+/* Sidebar and active menu elements - Rich forest and mint greens */
+.light-theme .bg-emerald-950\/40 {
+  background-color: #10b981 !important; /* Rich vibrant emerald */
+  color: #ffffff !important;
+}
+.light-theme .bg-emerald-950\/60 {
+  background-color: #047857 !important; /* Deep solid emerald */
+  color: #ffffff !important;
+}
+.light-theme .bg-gradient-to-b.from-slate-900 {
+  background-image: linear-gradient(to bottom, #ffffff, #ecfdf5) !important; /* soft white-mint premium gradient */
+  border-color: #cbd5e1 !important;
+}
+
+/* Form fields and interactive components */
+.light-theme input,
+.light-theme select,
+.light-theme textarea {
+  background-color: #ffffff !important;
+  color: #0f172a !important; /* dark slate text */
+  border-color: #cbd5e1 !important; /* elegant border color */
+}
+.light-theme input::placeholder {
+  color: #475569 !important; /* slate-600 highly visible gray placeholder */
+}
+
+/* Chat prompt bubble chips and status chips */
+.light-theme .bg-slate-950\/40,
+.light-theme .bg-slate-950\/80 {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+}
+.light-theme .bg-slate-900\/60 {
+  background-color: #ffffff !important;
+}
+
+/* Card and container borders */
+.light-theme .border-slate-800,
+.light-theme .border-slate-850,
+.light-theme .border-slate-900,
+.light-theme .border-slate-800\/80,
+.light-theme .border-slate-850\/60,
+.light-theme .border-emerald-900\/30,
+.light-theme .border-emerald-900\/40,
+.light-theme .border-emerald-900\/50,
+.light-theme .border-emerald-950\/40,
+.light-theme .border-emerald-950\/60 {
+  border-color: #cbd5e1 !important; /* high-end subtle layout grids */
+}
+
+/* Text properties - Critical for contrast safety with WCAG standards */
+.light-theme .text-white,
+.light-theme .text-slate-50,
+.light-theme .text-slate-100,
+.light-theme .text-slate-150,
+.light-theme .text-slate-200 {
+  color: #0f172a !important; /* absolute slate-900 reading ink value */
+}
+.text-white-force,
+.light-theme .text-white-force {
+  color: #ffffff !important;
+}
+.light-theme .text-slate-300,
+.light-theme .text-slate-350,
+.light-theme .text-slate-400,
+.light-theme .text-slate-450 {
+  color: #1e293b !important; /* slate-800 primary descriptions - vibrant dark grey */
+}
+.light-theme .text-slate-500,
+.light-theme .text-slate-600,
+.light-theme .text-slate-650 {
+  color: #334155 !important; /* slate-700 high definition secondary grey */
+}
+
+/* Specific Accent text custom mappings */
+.light-theme .text-emerald-300,
+.light-theme .text-emerald-400,
+.light-theme .text-emerald-500 {
+  color: #047857 !important; /* Deep emerald-700 green for light screen visibility */
+}
+.light-theme .text-emerald-600,
+.light-theme .text-emerald-700 {
+  color: #064e3b !important; /* Rich high contrast emerald-900 */
+}
+
+.light-theme .text-yellow-400,
+.light-theme .text-yellow-500,
+.light-theme .text-amber-400 {
+  color: #b45309 !important; /* Elite gold-bronze amber-700 for clear alert status */
+}
+
+.light-theme .text-red-400,
+.light-theme .text-red-500 {
+  color: #991b1b !important; /* High contrast warning red-800 */
+}
+
+.light-theme .text-indigo-400,
+.light-theme .text-indigo-500 {
+  color: #312e81 !important; /* Indigo-900 for cool theme highlights */
+}
+
+/* Shadows and Ambient elements - premium look on light canvases */
+.light-theme .shadow-md,
+.light-theme .shadow-lg,
+.light-theme .shadow-xl,
+.light-theme .shadow-2xl {
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.05) !important;
+}
+
+/* Gauges and active control adjustments */
+.light-theme .bg-slate-950.border-4.border-slate-800 {
+  background-color: #ffffff !important;
+  border-color: #94a3b8 !important;
+}
+.light-theme .bg-slate-900.border-4.border-slate-800 {
+  background-color: #ffffff !important;
+  border-color: #94a3b8 !important;
+}
+.light-theme .text-slate-300.bg-slate-950 {
+  color: #0f172a !important;
+  background-color: #ffffff !important;
+}
+
+/* Custom Light Mode Adjustments for Translucent and Colored Cards/Alerts */
+.light-theme .bg-emerald-950,
+.light-theme .bg-emerald-950\/10,
+.light-theme .bg-emerald-950\/20,
+.light-theme .bg-emerald-950\/25,
+.light-theme .bg-emerald-950\/30,
+.light-theme .bg-emerald-950\/40,
+.light-theme .bg-emerald-950\/50,
+.light-theme .bg-emerald-950\/55,
+.light-theme .bg-emerald-950\/60,
+.light-theme .bg-emerald-950\/80 {
+  background-color: #ecfdf5 !important; /* Super clear soft green-mint */
+  color: #064e3b !important; /* Rich high-contrast forest ink */
+}
+
+/* Red / Error feedback components (e.g. Errado buttons, risk warnings) */
+.light-theme .bg-red-950,
+.light-theme .bg-red-950\/10,
+.light-theme .bg-red-950\/20,
+.light-theme .bg-red-950\/30,
+.light-theme .bg-red-950\/40,
+.light-theme .bg-red-950\/50,
+.light-theme .bg-red-950\/60,
+.light-theme .bg-red-950\/80 {
+  background-color: #fef2f2 !important; /* Soft light warning red */
+  color: #991b1b !important; /* Highly visible alert red text */
+}
+
+/* Amber / Yellow badges/pills (e.g., ADAPTATIVO labels) */
+.light-theme .bg-yellow-950\/10,
+.light-theme .bg-yellow-950\/20,
+.light-theme .bg-yellow-950\/30,
+.light-theme .bg-yellow-950\/40,
+.light-theme .bg-yellow-950\/50,
+.light-theme .bg-yellow-950\/60,
+.light-theme .bg-yellow-950\/80,
+.light-theme .bg-yellow-500\/10 {
+  background-color: #fef9c3 !important; /* Gentle light yellow-creme */
+  color: #854d0e !important; /* Contrast yellow/bronze status ink */
+}
+
+/* Gradients that must adapt beautifully to Light Mode */
+.light-theme .bg-gradient-to-r.from-emerald-950\/40.to-yellow-950\/20 {
+  background-image: linear-gradient(to right, #ecfdf5, #fef9c3) !important;
+  border-color: #eab308 !important;
+}
+
+.light-theme .bg-gradient-to-b.from-slate-950.to-emerald-950\/20 {
+  background-image: linear-gradient(to bottom, #ffffff, #ecfdf5) !important;
+  border-color: #10b981 !important;
+}
+
+/* Ensure text indicators inside these custom light badges stay perfectly visible */
+.light-theme .bg-emerald-950\/50 .text-emerald-300,
+.light-theme .bg-emerald-950\/50 .text-emerald-400 {
+  color: #065f46 !important;
+}
+
+.light-theme .bg-red-950\/50 .text-red-300,
+.light-theme .bg-red-950\/50 .text-red-400 {
+  color: #991b1b !important;
+}
+
+.light-theme .bg-gradient-to-r.from-emerald-950\/40.to-yellow-950\/20 .text-white {
+  color: #0f172a !important; /* Force high-contrast slate block heading */
+}
+
+.light-theme .bg-gradient-to-r.from-emerald-950\/40.to-yellow-950\/20 .text-slate-400 {
+  color: #334155 !important; /* Force highly readable description gray */
+}
+
+/* ==========================================
+   OFFICIAL PRF THEME OVERRIDES (NAVY BLUE & GOLD)
+   ========================================== */
+
+/* Dark Mode Official PRF style overrides */
+.prf-theme:not(.light-theme) {
+  --background-navy: #0a0f1d; /* Sleek, high-contrast navy-indigo backdrop from mockup image */
+  --panel-navy: #0e1424;      /* Clean, deep premium navy-sapphire for menus and headers */
+  --card-navy: #111a2e;       /* Gorgeous rich cobalt-navy card matching attached image */
+  --gold-primary: #fbbf24;    /* Softer, lighter gold/amber-400 instead of harsh #eab308 */
+  --gold-accent: #fcd34d;     /* Calm, elegant pale gold/amber-300 instead of bright neon #facc15 */
+  
+  background-color: var(--background-navy) !important;
+}
+
+.prf-theme:not(.light-theme) .bg-slate-950 {
+  background-color: #070a13 !important; /* Rich deep navy backdrop */
+}
+
+.prf-theme:not(.light-theme) .bg-slate-900,
+.prf-theme:not(.light-theme) header#control-panel-header,
+.prf-theme:not(.light-theme) aside#applet-sidebar {
+  background-color: #0c1221 !important; /* Sleek deep space blue */
+  backdrop-filter: blur(12px);
+}
+
+.prf-theme:not(.light-theme) .bg-slate-850,
+.prf-theme:not(.light-theme) .bg-slate-800,
+.prf-theme:not(.light-theme) .bg-slate-850\/60 {
+  background-color: #111a2e !important; /* Rich sapphire cards matching Interactive Study Plan */
+}
+
+/* Borders in Dark PRF mode */
+.prf-theme:not(.light-theme) .border-slate-800,
+.prf-theme:not(.light-theme) .border-slate-850,
+.prf-theme:not(.light-theme) .border-slate-900,
+.prf-theme:not(.light-theme) .border-slate-800\/80,
+.prf-theme:not(.light-theme) .border-emerald-950\/40,
+.prf-theme:not(.light-theme) header#control-panel-header,
+.prf-theme:not(.light-theme) aside#applet-sidebar {
+  border-color: #1b263e !important; /* Glassmorphism premium dark border from mockup image */
+}
+
+/* Map circular gauges & charts in dark mode to gorgeous gold & dark sapphire track */
+.prf-theme:not(.light-theme) .stroke-emerald-950 {
+  stroke: #18223d !important; /* Dark sapphire gauge circle track */
+}
+
+.prf-theme:not(.light-theme) .stroke-emerald-500 {
+  stroke: #fbbf24 !important; /* Warm, glowing gold circular progress gauge representing 84% retention */
+  filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.25));
+}
+
+/* Custom charts nodes and grid tuning in Progresso */
+.prf-theme:not(.light-theme) #svg-line-graph circle {
+  fill: #fbbf24 !important; /* Golden point nodes */
+  stroke: #0a0f1d !important;
+}
+.prf-theme:not(.light-theme) #svg-line-graph text[fill="#059669"] {
+  fill: #fbbf24 !important; /* Gold high-score line text indicator */
+}
+.prf-theme:not(.light-theme) #svg-line-graph line[stroke="#047857"] {
+  stroke: rgba(251, 191, 36, 0.45) !important; /* Glowing golden target grid line */
+}
+.prf-theme:not(.light-theme) #gradient stop[stopColor="#10b981"] {
+  stop-color: #fbbf24 !important; /* Start of the gorgeous gold/amber trend line */
+}
+
+/* Custom sidebar active indicator glow */
+.prf-theme:not(.light-theme) aside#applet-sidebar button[id*="sidebar-tab-"] {
+  position: relative;
+}
+
+/* Map emerald green badges & highlights to official PRF Gold/Yellow only in dark mode */
+.prf-theme:not(.light-theme) .text-emerald-400,
+.prf-theme:not(.light-theme) .text-emerald-500 {
+  color: #fcd34d !important; /* Soft Gold/amber-300 instead of bright neon #facc15 */
+}
+
+.prf-theme:not(.light-theme) .text-emerald-300 {
+  color: #fef08a !important; /* Light Cream Gold */
+}
+
+.prf-theme:not(.light-theme) .text-emerald-600,
+.prf-theme:not(.light-theme) .text-emerald-700 {
+  color: #fbbf24 !important; /* Calm mid-gold/amber-400 instead of harsh #eab308 */
+}
+
+/* Sidebar Active states mapping in Dark Mode */
+.prf-theme:not(.light-theme) .bg-emerald-950\/40 {
+  background-color: rgba(251, 191, 36, 0.08) !important; /* Softer, low-saturation highlight tint */
+  color: #fcd34d !important;
+  border-left: 4.5px solid #fbbf24 !important; /* Elegant golden visual selector ribbon */
+}
+
+/* Button & interactive states mapping in Dark Mode */
+.prf-theme:not(.light-theme) .bg-emerald-500,
+.prf-theme:not(.light-theme) .border-emerald-500,
+.prf-theme:not(.light-theme) .bg-emerald-600 {
+  background-color: #fbbf24 !important; /* Softer light-gold button bg */
+  border-color: #fbbf24 !important;
+  color: #020811 !important;
+  font-weight: 700;
+}
+
+/* Ensure absolute contrast for any text/labels nested inside a gold-selected container */
+.prf-theme:not(.light-theme) .bg-emerald-500 *,
+.prf-theme:not(.light-theme) .border-emerald-500 *,
+.prf-theme:not(.light-theme) .bg-emerald-600 * {
+  color: #020811 !important;
+}
+
+/* Make sure icons are also high contrast dark indigo inside selected states */
+.prf-theme:not(.light-theme) .bg-emerald-500 svg,
+.prf-theme:not(.light-theme) .border-emerald-500 svg,
+.prf-theme:not(.light-theme) .bg-emerald-600 svg,
+.prf-theme:not(.light-theme) .bg-emerald-500 svg path,
+.prf-theme:not(.light-theme) .border-emerald-500 svg path,
+.prf-theme:not(.light-theme) .bg-emerald-600 svg path {
+  stroke: #020811 !important;
+  color: #020811 !important;
+}
+
+.prf-theme:not(.light-theme) .hover\:bg-emerald-650:hover,
+.prf-theme:not(.light-theme) .hover\:bg-emerald-600:hover {
+  background-color: #fcd34d !important; /* Softer, lighter hover state */
+  border-color: #fcd34d !important;
+}
+
+/* Premium shadows on Dark mode */
+.prf-theme:not(.light-theme) .shadow-2xl,
+.prf-theme:not(.light-theme) .shadow-xl {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* -------------------------------------------
+   Light Mode Official PRF style overrides
+   ------------------------------------------- */
+.light-theme.prf-theme {
+  background-color: #f1f5f9 !important; /* Clean premium grey-blue */
+}
+
+/* Force light card bodies to stay highly readable white */
+.light-theme.prf-theme .bg-slate-900,
+.light-theme.prf-theme .bg-slate-850,
+.light-theme.prf-theme .bg-slate-800,
+.light-theme.prf-theme .bg-slate-850\/60 {
+  background-color: #ffffff !important;
+}
+
+/* Light PRF highlights and borders */
+.light-theme.prf-theme header#control-panel-header,
+.light-theme.prf-theme aside#applet-sidebar {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
+.light-theme.prf-theme .text-emerald-400,
+.light-theme.prf-theme .text-emerald-500 {
+  color: #1e3a8a !important; /* Premium deep blue ink instead of light-green */
+}
+
+.light-theme.prf-theme .text-emerald-300 {
+  color: #047857 !important; /* Deep emerald-700 green for high contrast readability */
+}
+
+.light-theme.prf-theme .text-emerald-600,
+.light-theme.prf-theme .text-emerald-700 {
+  color: #0f172a !important; /* Slate-900 absolute ink color */
+}
+
+/* Sidebar Active indicators in Light PRF mode */
+.light-theme.prf-theme .bg-emerald-950\/40 {
+  background-color: #f1f5f9 !important;
+  color: #1e3a8a !important;
+  border-left: 4px solid #eab308 !important; /* Beautiful gold left ribbon indicators */
+}
+
+/* Primary buttons in Light PRF mode */
+.light-theme.prf-theme .bg-emerald-600,
+.light-theme.prf-theme .bg-emerald-500 {
+  background-color: #1a365d !important;
+  color: #ffffff !important;
+}
+
+.light-theme.prf-theme .hover\:bg-emerald-650:hover,
+.light-theme.prf-theme .hover\:bg-emerald-600:hover {
+  background-color: #0f172a !important;
+}
+
+/* Custom background page subtle gradients */
+.light-theme.prf-theme .bg-gradient-to-b.from-slate-900 {
+  background-image: linear-gradient(to bottom, #ffffff, #f1f5f9) !important;
+}
+
+/* Custom Premium Pricing Plan CTA Buttons */
+.btn-plan-active {
+  background-color: rgba(16, 185, 129, 0.08) !important;
+  border: 1.5px solid rgba(16, 185, 129, 0.3) !important;
+  color: #10b981 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  width: 100% !important;
+  font-weight: 700 !important;
+  padding: 0.65rem 1rem !important;
+  border-radius: 0.75rem !important;
+}
+
+.btn-plan-cta-standard {
+  background-color: #0f172a !important;
+  border: 1.5px solid #1e293b !important;
+  color: #f1f5f9 !important;
+  font-weight: 700 !important;
+  width: 100% !important;
+  text-align: center !important;
+  padding: 0.65rem 1rem !important;
+  border-radius: 0.75rem !important;
+  cursor: pointer !important;
+  display: block !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.btn-plan-cta-standard:hover {
+  background-color: #1e293b !important;
+  border-color: #475569 !important;
+  color: #ffffff !important;
+}
+
+.btn-plan-cta-premium {
+  background-image: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  width: 100% !important;
+  text-align: center !important;
+  padding: 0.65rem 1rem !important;
+  border-radius: 0.75rem !important;
+  cursor: pointer !important;
+  display: block !important;
+  box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.3) !important;
+  border: none !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.btn-plan-cta-premium:hover {
+  background-image: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+  box-shadow: 0 12px 24px -5px rgba(16, 185, 129, 0.45) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* --- Dark PRF Variant --- */
+.prf-theme:not(.light-theme) .btn-plan-active {
+  background-color: rgba(251, 191, 36, 0.06) !important;
+  border: 1.5px solid rgba(251, 191, 36, 0.25) !important;
+  color: #fcd34d !important;
+}
+
+.prf-theme:not(.light-theme) .btn-plan-cta-standard {
+  background-color: #0d1527 !important;
+  border: 1.5px solid rgba(251, 191, 36, 0.2) !important;
+  color: #fcd34d !important;
+}
+
+.prf-theme:not(.light-theme) .btn-plan-cta-standard:hover {
+  background-color: rgba(251, 191, 36, 0.08) !important;
+  border-color: #fcd34d !important;
+}
+
+.prf-theme:not(.light-theme) .btn-plan-cta-premium {
+  background-image: linear-gradient(135deg, #fbbf24 0%, #d97706 100%) !important;
+  color: #030812 !important;
+  border: 1.5px solid #fcd34d !important;
+  box-shadow: 0 10px 25px -5px rgba(251, 191, 36, 0.2) !important;
+}
+
+.prf-theme:not(.light-theme) .btn-plan-cta-premium:hover {
+  background-image: linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%) !important;
+  box-shadow: 0 12px 30px -5px rgba(251, 191, 36, 0.35) !important;
+}
+
+/* --- Plain Light Theme --- */
+.light-theme .btn-plan-active {
+  background-color: #ecfdf5 !important;
+  border: 1.5px solid #10b981 !important;
+  color: #047857 !important;
+}
+
+.light-theme .btn-plan-cta-standard {
+  background-color: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #334155 !important;
+}
+
+.light-theme .btn-plan-cta-standard:hover {
+  background-color: #f8fafc !important;
+  border-color: #64748b !important;
+  color: #0f172a !important;
+}
+
+.light-theme .btn-plan-cta-premium {
+  background-image: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 8px 16px -4px rgba(16, 185, 129, 0.25) !important;
+}
+
+.light-theme .btn-plan-cta-premium:hover {
+  background-image: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+}
+
+/* --- Light PRF (Navy & Gold) Combination --- */
+.light-theme.prf-theme .btn-plan-active {
+  background-color: #f0fdf4 !important;
+  border: 1.5px solid #16a34a !important;
+  color: #15803d !important;
+}
+
+.light-theme.prf-theme .btn-plan-cta-standard {
+  background-color: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #1a365d !important;
+}
+
+.light-theme.prf-theme .btn-plan-cta-standard:hover {
+  background-color: #f1f5f9 !important;
+  border-color: #1a365d !important;
+  color: #0f172a !important;
+}
+
+.light-theme.prf-theme .btn-plan-cta-premium {
+  background-image: linear-gradient(135deg, #1a365d 0%, #0f1e36 100%) !important;
+  color: #ffffff !important;
+  border: 1.5px solid #eab308 !important;
+  box-shadow: 0 8px 18px -4px rgba(26, 54, 93, 0.3) !important;
+}
+
+.light-theme.prf-theme .btn-plan-cta-premium:hover {
+  background-image: linear-gradient(135deg, #0f1e36 0%, #08101c 100%) !important;
+}
+
+/* Interactive transitions and tactile scaling */
+button, a, select, input {
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+button:active, a:active {
+  transform: scale(0.97);
+}
+
+/* --- High-Sobriety Athena AI Advice/Warning Box Styles --- */
+.athena-box-style {
+  background-color: rgba(15, 23, 42, 0.7) !important; /* Azul-escuro translúcido */
+  border: 1px solid rgba(245, 158, 11, 0.45) !important; /* Borda âmbar sutil */
+  border-radius: 0.75rem !important; /* rounded-xl */
+}
+.athena-box-style .text-athena-title {
+  color: #f59e0b !important; /* Âmbar */
+}
+.athena-box-style .text-athena-body {
+  color: #e2e8f0 !important; /* Slate claro text */
+}
+
+/* Light Mode support (Cinza-slate muito suave com borda e texto em azul-marinho) */
+.light-theme .athena-box-style {
+  background-color: #f1f5f9 !important; /* Cinza-slate muito suave (slate-100) */
+  border: 1.5px solid rgba(30, 58, 138, 0.3) !important; /* Borda de azul-marinho */
+}
+.light-theme .athena-box-style .text-athena-title {
+  color: #1e3a8a !important; /* Texto título em azul-marinho */
+}
+.light-theme .athena-box-style .text-athena-body {
+  color: #1e3a8a !important; /* Texto corpo em azul-marinho nos avisos gerais */
+}
+
+/* Custom Light Mode Overrides for Admin Panel high-sobriety backgrounds/borders */
+.light-theme .bg-\[\#090d16\] {
+  background-color: #f1f5f9 !important; /* Clean premium grey-blue page background */
+  color: #0f172a !important;
+}
+.light-theme .bg-\[\#0b0f19\] {
+  background-color: #ffffff !important; /* White sub-header strip */
+  border-bottom-color: #e2e8f0 !important;
+}
+.light-theme .bg-\[\#070a13\] {
+  background-color: #f8fafc !important; /* Soft slate-50 background for nav sidebars */
+}
+.light-theme .bg-\[\#0f1524\] {
+  background-color: #ffffff !important; /* Pure white containers/dashboard cards */
+}
+.light-theme .border-\[\#182030\],
+.light-theme .border-\[\#141b2b\],
+.light-theme .border-slate-800,
+.light-theme .border-slate-850 {
+  border-color: #cbd5e1 !important; /* Clean soft slate borders */
+}
+.light-theme .text-slate-100,
+.light-theme .text-slate-200,
+.light-theme .text-white {
+  color: #0f172a !important; /* High contrast dark ink text */
+}
+.light-theme .text-slate-300 {
+  color: #1e293b !important; /* Deep dark grey */
+}
+.light-theme .text-slate-350,
+.light-theme .text-slate-400 {
+  color: #334155 !important; /* High visibility grey text */
+}
+.light-theme .text-slate-500,
+.light-theme .text-slate-600,
+.light-theme .text-slate-650 {
+  color: #64748b !important; /* Accessible descriptor text */
+}
+.light-theme .text-\[\#7f8e9c\],
+.light-theme .text-\[\#8f9cae\] {
+  color: #475569 !important; /* Readable dark Slate for custom dashboard tags */
+}
+.light-theme .text-\[\#8f9cae\]\/60 {
+  color: #64748b !important;
+}
+.light-theme .bg-[#070a13]\/60,
+.light-theme .bg-slate-950 {
+  background-color: #f1f5f9 !important;
+}
+.light-theme .hover\:bg-\[\#070a13\]\/60:hover {
+  background-color: #e2e8f0 !important;
+}
+.light-theme .divide-y.divide-\[\#141b2b\] > * {
+  border-color: #cbd5e1 !important;
+}
+.light-theme .bg-indigo-600\/15 {
+  background-color: rgba(79, 70, 229, 0.1) !important; /* Solid light tint for active tab */
+}
+
+
+
+/* ==========================================
+   LOVABLE POLISH PASS — refined final finish
+   ========================================== */
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
+  --background: oklch(0.15 0.032 262);
+  --foreground: oklch(0.96 0.006 248);
+  --card: oklch(0.19 0.037 260);
+  --card-foreground: oklch(0.96 0.006 248);
+  --popover: oklch(0.17 0.034 260);
+  --popover-foreground: oklch(0.96 0.006 248);
+  --primary: oklch(0.79 0.151 83);
+  --primary-foreground: oklch(0.12 0.03 260);
+  --secondary: oklch(0.23 0.04 259);
+  --secondary-foreground: oklch(0.94 0.006 248);
+  --muted: oklch(0.24 0.032 259);
+  --muted-foreground: oklch(0.72 0.03 255);
+  --accent: oklch(0.68 0.13 251);
+  --accent-foreground: oklch(0.98 0.003 248);
+  --destructive: oklch(0.59 0.22 28);
+  --destructive-foreground: oklch(0.98 0.003 248);
+  --border: oklch(0.31 0.038 259 / 0.72);
+  --input: oklch(0.31 0.038 259 / 0.72);
+  --ring: oklch(0.79 0.151 83);
+  --sidebar: oklch(0.14 0.033 260);
+  --sidebar-foreground: oklch(0.94 0.006 248);
+  --sidebar-primary: oklch(0.79 0.151 83);
+  --sidebar-primary-foreground: oklch(0.12 0.03 260);
+  --sidebar-accent: oklch(0.22 0.04 259);
+  --sidebar-accent-foreground: oklch(0.94 0.006 248);
+  --sidebar-border: oklch(0.31 0.038 259 / 0.7);
+  --sidebar-ring: oklch(0.79 0.151 83);
+  --chart-1: oklch(0.79 0.151 83);
+  --chart-2: oklch(0.71 0.13 175);
+  --chart-3: oklch(0.68 0.13 251);
+  --chart-4: oklch(0.74 0.16 54);
+  --chart-5: oklch(0.62 0.18 29);
 }
 
 .dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+  --background: oklch(0.15 0.032 262);
+  --foreground: oklch(0.96 0.006 248);
+  --card: oklch(0.19 0.037 260);
+  --card-foreground: oklch(0.96 0.006 248);
+  --popover: oklch(0.17 0.034 260);
+  --popover-foreground: oklch(0.96 0.006 248);
+  --primary: oklch(0.79 0.151 83);
+  --primary-foreground: oklch(0.12 0.03 260);
+  --secondary: oklch(0.23 0.04 259);
+  --secondary-foreground: oklch(0.94 0.006 248);
+  --muted: oklch(0.24 0.032 259);
+  --muted-foreground: oklch(0.72 0.03 255);
+  --accent: oklch(0.68 0.13 251);
+  --accent-foreground: oklch(0.98 0.003 248);
+  --destructive: oklch(0.59 0.22 28);
+  --destructive-foreground: oklch(0.98 0.003 248);
+  --border: oklch(0.31 0.038 259 / 0.72);
+  --input: oklch(0.31 0.038 259 / 0.72);
+  --ring: oklch(0.79 0.151 83);
+  --sidebar: oklch(0.14 0.033 260);
+  --sidebar-foreground: oklch(0.94 0.006 248);
+  --sidebar-primary: oklch(0.79 0.151 83);
+  --sidebar-primary-foreground: oklch(0.12 0.03 260);
+  --sidebar-accent: oklch(0.22 0.04 259);
+  --sidebar-accent-foreground: oklch(0.94 0.006 248);
+  --sidebar-border: oklch(0.31 0.038 259 / 0.7);
+  --sidebar-ring: oklch(0.79 0.151 83);
 }
 
-@layer base {
-  * {
-    border-color: var(--color-border);
+body {
+  min-width: 320px;
+  background:
+    radial-gradient(circle at 20% -10%, rgba(245, 158, 11, 0.12), transparent 34rem),
+    radial-gradient(circle at 85% 0%, rgba(59, 130, 246, 0.10), transparent 30rem),
+    #070a13;
+  overflow-x: hidden;
+}
+
+#landing-container {
+  background:
+    linear-gradient(180deg, rgba(17, 24, 45, 0.92) 0%, rgba(9, 14, 27, 0.98) 45%, #070a13 100%),
+    radial-gradient(circle at 18% 12%, rgba(245, 158, 11, 0.12), transparent 34rem),
+    radial-gradient(circle at 78% 10%, rgba(79, 70, 229, 0.13), transparent 32rem) !important;
+}
+
+#landing-navbar,
+#control-panel-header,
+aside#applet-sidebar,
+#onboarding-card,
+#biblioteca-view-wrapper,
+#cronograma-view-container,
+#dashboard-tab-view > div,
+#application-viewport > div {
+  backdrop-filter: blur(18px) saturate(130%);
+}
+
+#landing-navbar {
+  box-shadow: 0 1px 0 rgba(255,255,255,0.04), 0 18px 50px rgba(0,0,0,0.16);
+}
+
+#hero-interactive-dashboard > div:last-child,
+#onboarding-card,
+#main-hq-mission-block,
+#biblioteca-view-wrapper,
+#cronograma-view-container {
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055) !important;
+}
+
+#landing-container section {
+  scroll-margin-top: 5.5rem;
+}
+
+#landing-container h1,
+#landing-container h2,
+#provax-application-workspace h1,
+#provax-application-workspace h2,
+#provax-application-workspace h3 {
+  text-wrap: balance;
+}
+
+#landing-container p,
+#provax-application-workspace p,
+#provax-application-workspace li {
+  text-wrap: pretty;
+}
+
+#landing-container button,
+#landing-container a,
+#provax-application-workspace button,
+#provax-application-workspace a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+#landing-container button:focus-visible,
+#landing-container a:focus-visible,
+#provax-application-workspace button:focus-visible,
+#provax-application-workspace a:focus-visible,
+#provax-application-workspace input:focus-visible,
+#provax-application-workspace textarea:focus-visible,
+#provax-application-workspace select:focus-visible {
+  outline: 2px solid rgba(251, 191, 36, 0.74);
+  outline-offset: 3px;
+}
+
+#application-body-layout {
+  min-height: calc(100vh - 72px);
+}
+
+#application-viewport {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(251, 191, 36, 0.42) rgba(15, 23, 42, 0.35);
+}
+
+#application-viewport::-webkit-scrollbar {
+  width: 10px;
+}
+
+#application-viewport::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.35);
+}
+
+#application-viewport::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(251, 191, 36, 0.58), rgba(180, 83, 9, 0.56));
+  border-radius: 999px;
+  border: 2px solid rgba(15, 23, 42, 0.35);
+}
+
+#applet-sidebar button[id*="sidebar-tab-"] {
+  min-height: 2.65rem;
+}
+
+#applet-sidebar button[id*="sidebar-tab-"]:hover {
+  transform: translateX(3px);
+}
+
+#countdown-minimal-pill,
+#main-hq-mission-block,
+#biblioteca-view-wrapper,
+#cronograma-view-container,
+#onboarding-card {
+  border-radius: 1.25rem !important;
+}
+
+@media (max-width: 640px) {
+  html {
+    font-size: 15px !important;
   }
 
-  body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
+  .text-5xl,
+  .text-6xl,
+  .text-7xl {
+    font-size: 2.75rem !important;
+    line-height: 1.06 !important;
+  }
+
+  #landing-container .font-mono {
+    letter-spacing: 0.02em;
+  }
+
+  #main-hq-mission-block,
+  #biblioteca-view-wrapper,
+  #cronograma-view-container {
+    padding: 1.1rem !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }

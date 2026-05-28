@@ -72,14 +72,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "ProvaX AI | Aprovação PRF" },
+      { name: "description", content: "Plataforma de estudos com IA estratégica para candidatos da PRF." },
+      { name: "author", content: "ProvaX AI" },
+      { property: "og:title", content: "ProvaX AI | Aprovação PRF" },
+      { property: "og:description", content: "Plataforma de estudos com IA estratégica para candidatos da PRF." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:site", content: "@ProvaXAI" },
+      { name: "twitter:title", content: "ProvaX AI | Aprovação PRF" },
+      { name: "twitter:description", content: "Plataforma de estudos com IA estratégica para candidatos da PRF." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/3e41ba21-fec0-432a-ac8a-d67213bd274e/id-preview-665b479c--d7867d37-58e4-44d7-9565-2a6c36896a0c.lovable.app-1779943337164.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/3e41ba21-fec0-432a-ac8a-d67213bd274e/id-preview-665b479c--d7867d37-58e4-44d7-9565-2a6c36896a0c.lovable.app-1779943337164.png" },
     ],
     links: [
       {
@@ -96,7 +100,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <head>
         <HeadContent />
       </head>
@@ -113,7 +117,6 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
     </QueryClientProvider>
   );

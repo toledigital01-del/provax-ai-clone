@@ -10,33 +10,89 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiGenerateScheduleRouteImport } from './routes/api/generate-schedule'
+import { Route as ApiGenerateQuestionRouteImport } from './routes/api/generate-question'
+import { Route as ApiChatAthenaRouteImport } from './routes/api/chat-athena'
+import { Route as ApiAnalyzeLibraryRouteImport } from './routes/api/analyze-library'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiGenerateScheduleRoute = ApiGenerateScheduleRouteImport.update({
+  id: '/api/generate-schedule',
+  path: '/api/generate-schedule',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiGenerateQuestionRoute = ApiGenerateQuestionRouteImport.update({
+  id: '/api/generate-question',
+  path: '/api/generate-question',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatAthenaRoute = ApiChatAthenaRouteImport.update({
+  id: '/api/chat-athena',
+  path: '/api/chat-athena',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAnalyzeLibraryRoute = ApiAnalyzeLibraryRouteImport.update({
+  id: '/api/analyze-library',
+  path: '/api/analyze-library',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/analyze-library': typeof ApiAnalyzeLibraryRoute
+  '/api/chat-athena': typeof ApiChatAthenaRoute
+  '/api/generate-question': typeof ApiGenerateQuestionRoute
+  '/api/generate-schedule': typeof ApiGenerateScheduleRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/analyze-library': typeof ApiAnalyzeLibraryRoute
+  '/api/chat-athena': typeof ApiChatAthenaRoute
+  '/api/generate-question': typeof ApiGenerateQuestionRoute
+  '/api/generate-schedule': typeof ApiGenerateScheduleRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/analyze-library': typeof ApiAnalyzeLibraryRoute
+  '/api/chat-athena': typeof ApiChatAthenaRoute
+  '/api/generate-question': typeof ApiGenerateQuestionRoute
+  '/api/generate-schedule': typeof ApiGenerateScheduleRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/api/analyze-library'
+    | '/api/chat-athena'
+    | '/api/generate-question'
+    | '/api/generate-schedule'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/api/analyze-library'
+    | '/api/chat-athena'
+    | '/api/generate-question'
+    | '/api/generate-schedule'
+  id:
+    | '__root__'
+    | '/'
+    | '/api/analyze-library'
+    | '/api/chat-athena'
+    | '/api/generate-question'
+    | '/api/generate-schedule'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiAnalyzeLibraryRoute: typeof ApiAnalyzeLibraryRoute
+  ApiChatAthenaRoute: typeof ApiChatAthenaRoute
+  ApiGenerateQuestionRoute: typeof ApiGenerateQuestionRoute
+  ApiGenerateScheduleRoute: typeof ApiGenerateScheduleRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +104,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/generate-schedule': {
+      id: '/api/generate-schedule'
+      path: '/api/generate-schedule'
+      fullPath: '/api/generate-schedule'
+      preLoaderRoute: typeof ApiGenerateScheduleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/generate-question': {
+      id: '/api/generate-question'
+      path: '/api/generate-question'
+      fullPath: '/api/generate-question'
+      preLoaderRoute: typeof ApiGenerateQuestionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat-athena': {
+      id: '/api/chat-athena'
+      path: '/api/chat-athena'
+      fullPath: '/api/chat-athena'
+      preLoaderRoute: typeof ApiChatAthenaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/analyze-library': {
+      id: '/api/analyze-library'
+      path: '/api/analyze-library'
+      fullPath: '/api/analyze-library'
+      preLoaderRoute: typeof ApiAnalyzeLibraryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiAnalyzeLibraryRoute: ApiAnalyzeLibraryRoute,
+  ApiChatAthenaRoute: ApiChatAthenaRoute,
+  ApiGenerateQuestionRoute: ApiGenerateQuestionRoute,
+  ApiGenerateScheduleRoute: ApiGenerateScheduleRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
