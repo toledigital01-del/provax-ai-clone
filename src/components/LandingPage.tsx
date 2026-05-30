@@ -77,14 +77,14 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#11182d] via-[#0d1424] to-[#080d19] text-slate-100 font-sans selection:bg-amber-500/20 selection:text-white" id="landing-container">
       
-      {/* 1. SEÇÃO DE CONDIÇÃO ESPECIAL (PRE-HEADER ALERT) */}
+      {/* 1. PRE-HEADER ALERT */}
       <div className="bg-gradient-to-r from-amber-600/30 via-slate-900 to-amber-600/30 text-slate-300 px-4 py-2 sm:py-2.5 text-center text-xs sm:text-sm tracking-wider flex items-center justify-center gap-2 border-b border-white/[0.04] relative z-50">
         <span className="flex h-2 w-2 relative shrink-0">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
           <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
         </span>
         <span className="font-mono text-sm">
-          CONDIÇÃO DE RETRANCAS FECHADAS: Mentoria estratégica da <strong className="text-amber-400">Athena AI</strong> habilitada para novos usuários.
+          EDITAL PRF EM BREVE: <strong className="text-amber-400">Athena AI</strong> já mapeou todos os conteúdos — sua estratégia começa agora.
         </span>
       </div>
 
@@ -201,7 +201,7 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
 
               {/* Precise Subheadline */}
               <p className="text-[#e2e8f0] text-lg sm:text-xl md:text-2xl leading-relaxed font-normal max-w-3xl">
-                A <strong className="text-white font-bold">Athena</strong> analisa editais completos, mapeia suas fraquezas em tempo real e calcula automaticamente uma estratégia de estudos de alta performance baseada rigorosamente no perfil da banca <strong className="text-amber-400 font-bold">CEBRASPE</strong>. Estude o conteúdo certo, recorde antes de esquecer e treine com a penalidade real de prova.
+                A <strong className="text-white font-bold">Athena</strong> lê o edital, mapeia suas fraquezas e monta sua estratégia de aprovação — baseada no perfil exato da banca <strong className="text-amber-400 font-bold">CEBRASPE</strong>. Sem chute. Sem desperdício de tempo.
               </p>
 
               {/* Action Rows */}
