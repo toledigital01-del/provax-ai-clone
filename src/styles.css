@@ -375,9 +375,9 @@ body {
 
 /* Dark Mode Official PRF style overrides */
 .prf-theme:not(.light-theme) {
-  --background-navy: #0a0f1d; /* Sleek, high-contrast navy-indigo backdrop from mockup image */
-  --panel-navy: #0e1424;      /* Clean, deep premium navy-sapphire for menus and headers */
-  --card-navy: #111a2e;       /* Gorgeous rich cobalt-navy card matching attached image */
+  --background-navy: #0b0d1c; /* Refined midnight indigo - deeper, more elegant than navy */
+  --panel-navy: #11142b;      /* Rich indigo panel - sophisticated low-saturation depth */
+  --card-navy: #181c3a;       /* Premium midnight indigo card - luxurious tone */
   --gold-primary: #fbbf24;    /* Softer, lighter gold/amber-400 instead of harsh #eab308 */
   --gold-accent: #fcd34d;     /* Calm, elegant pale gold/amber-300 instead of bright neon #facc15 */
   
@@ -385,20 +385,20 @@ body {
 }
 
 .prf-theme:not(.light-theme) .bg-slate-950 {
-  background-color: #070a13 !important; /* Rich deep navy backdrop */
+  background-color: #08091a !important; /* Deepest midnight indigo backdrop */
 }
 
 .prf-theme:not(.light-theme) .bg-slate-900,
 .prf-theme:not(.light-theme) header#control-panel-header,
 .prf-theme:not(.light-theme) aside#applet-sidebar {
-  background-color: #0c1221 !important; /* Sleek deep space blue */
+  background-color: #0e1124 !important; /* Elegant midnight indigo for chrome */
   backdrop-filter: blur(12px);
 }
 
 .prf-theme:not(.light-theme) .bg-slate-850,
 .prf-theme:not(.light-theme) .bg-slate-800,
 .prf-theme:not(.light-theme) .bg-slate-850\/60 {
-  background-color: #111a2e !important; /* Rich sapphire cards matching Interactive Study Plan */
+  background-color: #181c3a !important; /* Premium midnight indigo cards */
 }
 
 /* Borders in Dark PRF mode */
@@ -409,7 +409,7 @@ body {
 .prf-theme:not(.light-theme) .border-emerald-950\/40,
 .prf-theme:not(.light-theme) header#control-panel-header,
 .prf-theme:not(.light-theme) aside#applet-sidebar {
-  border-color: #1b263e !important; /* Glassmorphism premium dark border from mockup image */
+  border-color: #262b४f !important; /* Subtle indigo border with refined glow */
 }
 
 /* Map circular gauges & charts in dark mode to gorgeous gold & dark sapphire track */
