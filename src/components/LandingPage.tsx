@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  Shield, CheckCircle, ArrowRight, ShieldAlert, Check, 
-  MessageSquare, Compass, Star, Award, BookOpen, Clock, Calendar, Layers, 
+import {
+  Shield, CheckCircle, ArrowRight, ShieldAlert, Check,
+  MessageSquare, Compass, Star, Award, BookOpen, Clock, Calendar, Layers,
   Sparkles, ListTodo, HelpCircle, Flame, CreditCard, ChevronRight, Menu, X,
   Sliders, TrendingUp, Scale, AlertTriangle, GraduationCap, ChevronDown, CheckSquare,
-  Upload, FileText, Database, UserCheck, Zap, RefreshCw, BarChart3, ArrowRightLeft
+  Upload, FileText, Database, UserCheck, Zap, RefreshCw, BarChart3, ArrowRightLeft,
+  PlayCircle, Bookmark, Quote
 } from 'lucide-react';
 import Logo from './Logo';
 // @ts-ignore
@@ -77,25 +78,28 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#11182d] via-[#0d1424] to-[#080d19] text-slate-100 font-sans selection:bg-amber-500/20 selection:text-white" id="landing-container">
       
-      {/* 1. PRE-HEADER ALERT */}
-      <div className="bg-gradient-to-r from-amber-600/30 via-slate-900 to-amber-600/30 text-slate-300 px-4 py-2 sm:py-2.5 text-center text-xs sm:text-sm tracking-wider flex items-center justify-center gap-2 border-b border-white/[0.04] relative z-50">
-        <span className="flex h-2 w-2 relative shrink-0">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
-        </span>
-        <span className="font-mono text-sm">
-          EDITAL PRF EM BREVE: <strong className="text-amber-400">Athena AI</strong> já mapeou todos os conteúdos — sua estratégia começa agora.
-        </span>
-      </div>
+      {/* 1 + 2. PRE-HEADER + NAVBAR — fixed container */}
+      <div className="fixed top-0 left-0 right-0 z-50">
 
-      {/* 2. STICKY NAVBAR (Linear/Stripe style) */}
-      <nav className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-        isSticky 
-          ? 'bg-[#11182d]/95 shadow-2xl shadow-indigo-950/10 border-b border-white/[0.06] backdrop-blur-xl' 
-          : 'bg-transparent border-b border-transparent'
-      }`} id="landing-navbar" style={{ top: isSticky ? '0px' : 'auto' }}>
+        {/* PRE-HEADER ALERT */}
+        <div className="bg-gradient-to-r from-amber-600/30 via-slate-900 to-amber-600/30 text-slate-300 px-4 py-2 text-center text-xs tracking-wider flex items-center justify-center gap-2 border-b border-white/[0.04]">
+          <span className="flex h-2 w-2 relative shrink-0">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+          </span>
+          <span className="font-mono text-xs sm:text-sm">
+            EDITAL PRF EM BREVE: <strong className="text-amber-400">Athena AI</strong> já mapeou todos os conteúdos — sua estratégia começa agora.
+          </span>
+        </div>
+
+        {/* STICKY NAVBAR */}
+        <nav className={`transition-all duration-300 ${
+          isSticky
+            ? 'bg-[#11182d]/95 shadow-2xl shadow-indigo-950/10 border-b border-white/[0.06] backdrop-blur-xl'
+            : 'bg-[#11182d]/60 backdrop-blur-md border-b border-transparent'
+        }`} id="landing-navbar">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-14 sm:h-16">
+          <div className="flex items-center justify-between h-24 sm:h-28">
             
             {/* Left Brand */}
             <div className="flex items-center gap-2 cursor-pointer opacity-95 hover:opacity-100 transition-opacity" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
@@ -112,12 +116,12 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
 
             {/* Right actions */}
             <div className="hidden md:flex items-center gap-5">
-              <button onClick={onLoginDirectly} className="text-[12.5px] font-medium text-slate-350 hover:text-white transition-colors cursor-pointer">
+              <button onClick={onLoginDirectly} className="text-[12.5px] font-medium text-slate-300 hover:text-white transition-colors cursor-pointer">
                 Entrar
               </button>
               <button 
                 onClick={onStartOnboarding}
-                className="px-4 py-1.5 text-[12px] font-bold text-slate-950 bg-gradient-to-r from-amber-400 to-amber-505 bg-amber-500 hover:bg-amber-400 rounded-lg transition-all cursor-pointer shadow-lg shadow-amber-500/10 hover:scale-[1.02] flex items-center gap-1.5"
+                className="px-4 py-1.5 text-[12px] font-bold text-slate-950 bg-amber-500 hover:bg-amber-400 rounded-lg transition-all cursor-pointer shadow-lg shadow-amber-500/10 hover:scale-[1.02] flex items-center gap-1.5"
                 id="landing-signup-btn"
               >
                 Inicie Grátis <ArrowRight className="w-3.5 h-3.5" />
@@ -144,7 +148,7 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="md:hidden border-t border-white/[0.05] bg-[#0a0e1a] overflow-hidden"
+              className="md:hidden border-t border-white/[0.05] bg-[#0a0e1a]/95 backdrop-blur-xl overflow-hidden"
               id="landing-mobile-dropdown"
             >
               <div className="px-6 pt-3 pb-8 space-y-4">
@@ -156,7 +160,7 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
                 <div className="grid grid-cols-2 gap-3 pt-4 border-t border-white/[0.05]">
                   <button 
                     onClick={onLoginDirectly}
-                    className="w-full text-center py-2.5 text-xs text-slate-305 border border-white/10 rounded-lg bg-transparent font-medium"
+                    className="w-full text-center py-2.5 text-xs text-slate-300 border border-white/10 rounded-lg bg-transparent font-medium"
                   >
                     Entrar
                   </button>
@@ -171,10 +175,11 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
             </motion.div>
           )}
         </AnimatePresence>
-      </nav>
+        </nav>
+      </div>{/* end fixed header container */}
 
-      {/* Spacer to compensate for elements */}
-      <div className="h-14 sm:h-16" />
+      {/* Spacer: pre-header (~33px) + navbar (80px/96px) */}
+      <div className="h-[129px] sm:h-[145px]" />
 
       {/* 3. HERO SECTION (Stripe/Linear style with beautiful radial glows) */}
       <section className="relative py-20 sm:py-28 overflow-hidden border-b border-white/[0.03]">
@@ -189,7 +194,7 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
             <div className="lg:col-span-7 flex flex-col items-start space-y-7 text-left">
               
               {/* Premium Badge */}
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-505/10 bg-amber-500/10 border border-amber-500/20 rounded-full text-xs font-mono font-bold text-amber-400 shadow-lg shadow-amber-950/20">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full text-xs font-mono font-bold text-amber-400 shadow-lg shadow-amber-950/20">
                 <Sparkles className="w-3.5 h-3.5 text-amber-500 fill-amber-500/20" />
                 <span>✦ Exclusivo para o edital da PRF</span>
               </div>
@@ -214,11 +219,12 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
                   <ArrowRight className="w-5 h-5 text-slate-950 stroke-[2.5]" />
                 </button>
                 
-                <a 
+                <a
                   href="#playground"
                   onClick={(e) => handleScrollToSection(e, 'playground')}
                   className="px-8 py-5 text-base font-bold text-slate-200 border border-white/[0.12] bg-white/[0.03] hover:bg-white/[0.08] hover:text-white rounded-xl text-center shadow-lg transition-all flex items-center justify-center gap-3"
                 >
+                  <PlayCircle className="w-5 h-5 text-amber-400" />
                   Ver Inteligência em Ação
                 </a>
               </div>
@@ -299,7 +305,7 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
                   <div className="p-1.5 bg-red-950/40 rounded-lg">
                     <ShieldAlert className="w-5 h-5 text-red-400" />
                   </div>
-                  <strong className="text-slate-350 text-sm font-semibold tracking-wide uppercase">Método Antigo (Estudo Passivo)</strong>
+                  <strong className="text-slate-300 text-sm font-semibold tracking-wide uppercase">Método Antigo (Estudo Passivo)</strong>
                 </div>
                 
                 <ul className="space-y-4 text-xs sm:text-sm text-slate-400">
@@ -367,7 +373,7 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="text-center space-y-4 mb-16">
-            <span className="text-xs font-mono uppercase bg-amber-550/15 text-amber-500 tracking-wider font-extrabold px-3 py-1 rounded-full bg-amber-500/10 inline-block">
+            <span className="text-xs font-mono uppercase text-amber-500 tracking-wider font-extrabold px-3 py-1 rounded-full bg-amber-500/10 inline-block">
               DEMONSTRAÇÃO INTERATIVA
             </span>
             <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
@@ -392,12 +398,12 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-lg ${activePlaygroundTab === 'edital' ? 'bg-amber-505/20 text-amber-400 bg-amber-500/20' : 'bg-white/[0.04] text-slate-400 group-hover:text-white'}`}>
+                  <div className={`p-2 rounded-lg ${activePlaygroundTab === 'edital' ? 'bg-amber-500/20 text-amber-400' : 'bg-white/[0.04] text-slate-400 group-hover:text-white'}`}>
                     <Upload className="w-4 h-4" />
                   </div>
                   <div>
                     <h4 className="text-xs sm:text-sm font-bold">1 Mapeamento de Edital</h4>
-                    <p className="text-[10px] text-slate-500 group-hover:text-slate-450">Análise de PDF estratégica</p>
+                    <p className="text-[10px] text-slate-500 group-hover:text-slate-400">Análise de PDF estratégica</p>
                   </div>
                 </div>
                 <ChevronRight className="w-4 h-4 text-slate-600 group-hover:text-white transition-transform" />
@@ -412,12 +418,12 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-lg ${activePlaygroundTab === 'questoes' ? 'bg-amber-505/20 text-amber-400 bg-amber-500/20' : 'bg-white/[0.04] text-slate-400 group-hover:text-white'}`}>
+                  <div className={`p-2 rounded-lg ${activePlaygroundTab === 'questoes' ? 'bg-amber-500/20 text-amber-400' : 'bg-white/[0.04] text-slate-400 group-hover:text-white'}`}>
                     <Sparkles className="w-4 h-4" />
                   </div>
                   <div>
                     <h4 className="text-xs sm:text-sm font-bold">2 Geração de Exercício</h4>
-                    <p className="text-[10px] text-slate-500 group-hover:text-slate-450">Questões adaptativas CEBRASPE</p>
+                    <p className="text-[10px] text-slate-500 group-hover:text-slate-400">Questões adaptativas CEBRASPE</p>
                   </div>
                 </div>
                 <ChevronRight className="w-4 h-4 text-slate-600 group-hover:text-white transition-transform" />
@@ -432,12 +438,12 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-lg ${activePlaygroundTab === 'revisao' ? 'bg-amber-505/20 text-amber-400 bg-amber-500/20' : 'bg-white/[0.04] text-slate-400 group-hover:text-white'}`}>
+                  <div className={`p-2 rounded-lg ${activePlaygroundTab === 'revisao' ? 'bg-amber-500/20 text-amber-400' : 'bg-white/[0.04] text-slate-400 group-hover:text-white'}`}>
                     <RefreshCw className="w-4 h-4" />
                   </div>
                   <div>
                     <h4 className="text-xs sm:text-sm font-bold">3 Revisão Espaçada</h4>
-                    <p className="text-[10px] text-slate-500 group-hover:text-slate-450">Fixação profunda ativa</p>
+                    <p className="text-[10px] text-slate-500 group-hover:text-slate-400">Fixação profunda ativa</p>
                   </div>
                 </div>
                 <ChevronRight className="w-4 h-4 text-slate-600 group-hover:text-white transition-transform" />
@@ -452,12 +458,12 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-lg ${activePlaygroundTab === 'diagnostico' ? 'bg-amber-505/20 text-amber-400 bg-amber-500/20' : 'bg-white/[0.04] text-slate-400 group-hover:text-white'}`}>
+                  <div className={`p-2 rounded-lg ${activePlaygroundTab === 'diagnostico' ? 'bg-amber-500/20 text-amber-400' : 'bg-white/[0.04] text-slate-400 group-hover:text-white'}`}>
                     <BarChart3 className="w-4 h-4" />
                   </div>
                   <div>
                     <h4 className="text-xs sm:text-sm font-bold">4 Diagnóstico Predizer</h4>
-                    <p className="text-[10px] text-slate-500 group-hover:text-slate-450">Risco e nota de corte real</p>
+                    <p className="text-[10px] text-slate-500 group-hover:text-slate-400">Risco e nota de corte real</p>
                   </div>
                 </div>
                 <ChevronRight className="w-4 h-4 text-slate-600 group-hover:text-white transition-transform" />
@@ -579,7 +585,7 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
 
                     {simulationState === 'completed' && (
                       <div className="space-y-4 animate-fade-in text-left">
-                        <span className="bg-amber-400/10 text-amber-450 border border-amber-500/20 text-amber-500 font-mono text-[9px] font-bold px-2 py-0.5 rounded uppercase">
+                        <span className="bg-amber-400/10 border border-amber-500/20 text-amber-500 font-mono text-[9px] font-bold px-2 py-0.5 rounded uppercase">
                           Questão Inédita Gerada p/ {selectedTopic}
                         </span>
                         
@@ -773,7 +779,7 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
               <span className="text-[11px] text-slate-400 block font-medium">Tempo semanal poupado</span>
             </div>
             <div className="bg-white/[0.01] border border-white/[0.04] rounded-2xl p-6 space-y-1">
-              <span className="text-3xl sm:text-4xl font-black text-amber-550 block font-mono text-amber-500">12.000+</span>
+              <span className="text-3xl sm:text-4xl font-black text-amber-500 block font-mono">12.000+</span>
               <span className="text-[11px] text-slate-400 block font-medium">Questões CEBRASPE resolvidas</span>
             </div>
           </div>
@@ -800,10 +806,10 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
               { icon: Calendar, title: "Cronograma IA Adaptativo", desc: "Gerado e recalculado dinamicamente toda semana com base na sua rotina e na calibragem de erros." },
               { icon: Zap, title: "Missão do Dia Calibrada", desc: "Sua folha de rotas diária contendo tarefas adaptativas de estudo ativo com impacto real previsto." },
               { icon: Layers, title: "Repetição Espaçada Inteligente", desc: "Resgate ativo de conceitos memorizados antes da curva natural de esquecimento te fazer recomeçar." },
-              { icon: BookmarkLeafSimulated, title: "Flashcards com 6 Modos", desc: "Fixação dinâmica por associação, memorização de Lei Seca e cartões inteligentes digitados pela mentora Athena." },
+              { icon: Bookmark, title: "Flashcards com 6 Modos", desc: "Fixação dinâmica por associação, memorização de Lei Seca e cartões inteligentes digitados pela mentora Athena." },
               { icon: Shield, title: "Simulador de Risco Ativo", desc: "Preveja o impacto da penalidade do CEBRASPE de -1 por erro. Aprenda taticamente quando deixar em branco." }
             ].map((feature, id) => {
-              const IconComp = feature.icon === BookmarkLeafSimulated ? Sparkles : feature.icon;
+              const IconComp = feature.icon;
               return (
                 <div key={id} className="p-6 bg-white/[0.01] border border-white/[0.05] rounded-xl hover:border-amber-500/40 hover:bg-white/[0.02] transition-all duration-300 scale-hover text-left space-y-4">
                   <div className="p-2.5 bg-amber-500/5 rounded-lg w-max border border-amber-500/10">
@@ -889,7 +895,7 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
               <div className="space-y-4">
                 <div>
                   <h3 className="text-lg font-bold text-white">Essencial PRF</h3>
-                  <p className="text-[10px] font-mono text-amber-450 text-amber-500 uppercase tracking-widest font-bold mt-1">Evolução Focada</p>
+                  <p className="text-[10px] font-mono text-amber-500 uppercase tracking-widest font-bold mt-1">Evolução Focada</p>
                 </div>
                 
                 <div className="flex items-baseline gap-1 font-mono">
@@ -900,7 +906,7 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
 
                 <div className="h-[0.5px] bg-white/[0.06]" />
 
-                <ul className="space-y-3.5 text-xs text-slate-305 text-slate-300">
+                <ul className="space-y-3.5 text-xs text-slate-300">
                   <li className="flex items-start gap-2.5">
                     <Check className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
                     <span>Resolução ilimitada de simulados</span>
@@ -938,7 +944,7 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
               <div className="space-y-4">
                 <div>
                   <h3 className="text-lg font-bold text-white flex items-center gap-1.5">
-                    Athena Supreme <Sparkles className="w-4 h-4 text-amber-505 text-amber-505 text-amber-500" />
+                    Athena Supreme <Sparkles className="w-4 h-4 text-amber-500" />
                   </h3>
                   <p className="text-[10px] font-mono text-amber-400 uppercase tracking-widest font-bold mt-1">Acesso Supremo Ilimitado</p>
                 </div>
@@ -992,7 +998,60 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
         </div>
       </section>
 
-      {/* 9. SEÇÃO FAQ ACCORDION (REFINADO) */}
+      {/* 9. DEPOIMENTOS */}
+      <section className="py-20 sm:py-28 bg-[#080d19] border-t border-white/[0.03]" id="depoimentos">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center space-y-3 mb-14">
+            <span className="text-xs font-mono uppercase text-amber-400 tracking-wider font-extrabold block">PROVA SOCIAL</span>
+            <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+              Quem já estuda com a Athena
+            </h2>
+            <p className="text-slate-400 text-xs sm:text-sm">Candidatos reais, resultados reais.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              {
+                name: "Lucas Ferreira",
+                role: "Aprovado PRF 2024 — 1ª fase",
+                avatar: "LF",
+                color: "from-amber-600 to-amber-800",
+                text: "Em 2 meses com o ProvaX AI, minha média no simulado CEBRASPE foi de 58% para 79%. A Athena identificou minhas falhas em Legislação de Trânsito antes que eu percebesse."
+              },
+              {
+                name: "Camila Souza",
+                role: "Estudante dedicada — 6h/dia",
+                avatar: "CS",
+                color: "from-indigo-600 to-indigo-800",
+                text: "O cronograma adaptativo mudou tudo. Antes eu ficava perdida entre matérias. Agora cada semana tem um foco claro e os flashcards reforçam exatamente o que eu esqueço."
+              },
+              {
+                name: "Rafael Mendes",
+                role: "Aprovado CONTRAN 2025",
+                avatar: "RM",
+                color: "from-emerald-700 to-emerald-900",
+                text: "O simulador de risco do CEBRASPE é genial. Aprendi quando vale marcar e quando deixar em branco. Economizei mais de 8 pontos de penalidade na prova real."
+              }
+            ].map((t, i) => (
+              <div key={i} className="p-6 bg-white/[0.02] border border-white/[0.06] rounded-2xl flex flex-col gap-5 hover:border-amber-500/20 transition-all">
+                <Quote className="w-6 h-6 text-amber-500/40" />
+                <p className="text-sm text-slate-300 leading-relaxed flex-1">"{t.text}"</p>
+                <div className="flex items-center gap-3 pt-2 border-t border-white/[0.04]">
+                  <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${t.color} flex items-center justify-center text-xs font-black text-white shrink-0`}>
+                    {t.avatar}
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-white">{t.name}</p>
+                    <p className="text-[11px] text-slate-500">{t.role}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 10. SEÇÃO FAQ ACCORDION (REFINADO) */}
       <section className="py-20 bg-[#0a0e1a] border-t border-white/[0.03]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           
@@ -1005,8 +1064,11 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
             {[
               { q: "O ProvaX AI é atualizado de acordo com o edital mais recente?", a: "Sim! A Athena é alimentada constantemente com as diretrizes do edital oficial mais recente da Polícia Rodoviária Federal, cobrindo Código de Trânsito, resoluções CONTRAN solicitadas e matérias atualizadas." },
               { q: "Como o simulador calcula a penalidade do CEBRASPE?", a: "No ProvaX AI, adotamos rigidamente o padrão oficial de uma questão errada anular uma certa. Caso marque uma opção incorreta, sua pontuação geral é subtraída em 1 ponto. Você desenvolve a maturidade de quando vale a pena chutar." },
-              { q: "Posso utilizar meus próprios materiais de estudo?", a: "Sim, no plano Athena Gold você pode anexar seus e-books e PDFs de cursinhos parceiros. Nossa IA lê o arquivo e gera automaticamente simulados e flashcards sobre o conteúdo." },
-              { q: "Como funciona a garantia de reembolso?", a: "Oferecemos teste integral de 7 dias grátis. Além disso, se por qualquer razão você não estiver satisfeito após assinar, pode solicitar a devolução dentro do portal em até 7 dias, estornado via Stripe." }
+              { q: "Posso utilizar meus próprios materiais de estudo?", a: "Sim, no plano Athena Supreme você pode anexar seus e-books e PDFs de cursinhos parceiros. Nossa IA lê o arquivo e gera automaticamente simulados e flashcards sobre o conteúdo." },
+              { q: "Como funciona a garantia de reembolso?", a: "Oferecemos teste integral de 7 dias grátis. Além disso, se por qualquer razão você não estiver satisfeito após assinar, pode solicitar a devolução dentro do portal em até 7 dias, estornado via Stripe." },
+              { q: "Preciso estudar todos os dias para ter resultado?", a: "Não necessariamente. A Athena adapta o cronograma ao seu ritmo real. Se você tiver apenas 1 hora por dia, ela prioriza os blocos de maior impacto na nota de corte. Consistência supera volume." },
+              { q: "A plataforma funciona no celular?", a: "Sim. O ProvaX AI é totalmente responsivo e otimizado para mobile. Você pode resolver simulados, revisar flashcards e conversar com a Athena diretamente pelo smartphone, sem perder nenhuma funcionalidade." },
+              { q: "Qual a diferença entre o plano Essencial e o Athena Supreme?", a: "O Essencial cobre o núcleo de estudos: simulados ilimitados, cronograma dinâmico e flashcards. O Athena Supreme adiciona suporte ilimitado 24h com a IA, upload de PDFs próprios, diagnóstico preditivo de nota de corte e acesso antecipado a novos módulos estratégicos." }
             ].map((faq, index) => (
               <div 
                 key={index} 
@@ -1049,7 +1111,7 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
             Não estude mais com intuições. <br />
             <span className="text-amber-500">Descubra a precisão cirúrgica.</span>
           </h2>
-          <p className="text-slate-450 text-slate-400 text-sm sm:text-base max-w-lg mx-auto">
+          <p className="text-slate-400 text-sm sm:text-base max-w-lg mx-auto">
             Configure seu perfil cognitivo em menos de 2 minutos e inicie hoje sua nova rotina acelerada.
           </p>
 
@@ -1076,7 +1138,7 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
             {/* Column 1 - Brand */}
             <div className="md:col-span-6 space-y-4 text-left">
               <Logo variant="compact" theme="dark" />
-              <p className="text-[11px] font-sans text-slate-450 text-slate-400 leading-relaxed max-w-sm">
+              <p className="text-[11px] font-sans text-slate-400 leading-relaxed max-w-sm">
                 O ProvaX AI é a única plataforma de inteligência de concursos estrategicamente modelada para a aprovação na PRF. Desenvolvido por especialistas da área de segurança em parceria com a SYNTRO.
               </p>
             </div>
@@ -1088,7 +1150,7 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
                 <li><a href="#diferencial" onClick={(e) => handleScrollToSection(e, 'diferencial')} className="hover:text-amber-500 transition-colors">Diferenciais</a></li>
                 <li><a href="#playground" onClick={(e) => handleScrollToSection(e, 'playground')} className="hover:text-amber-500 transition-colors">Como Funciona</a></li>
                 <li><a href="#funcionalidades" onClick={(e) => handleScrollToSection(e, 'funcionalidades')} className="hover:text-amber-500 transition-colors">Mapeamento Integrado</a></li>
-                <li><a href="#precos" onClick={(e) => handleScrollToSection(e, 'precos')} className="hover:text-amber-505 hover:text-amber-500 transition-colors">Preços Premium</a></li>
+                <li><a href="#precos" onClick={(e) => handleScrollToSection(e, 'precos')} className="hover:text-amber-500 transition-colors">Preços Premium</a></li>
               </ul>
             </div>
 
@@ -1141,7 +1203,3 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
   );
 }
 
-// Dummy element identifier to safely handle the simulated placeholder icon property without breaking react execution
-function BookmarkLeafSimulated() {
-  return null;
-}

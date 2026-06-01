@@ -95,30 +95,15 @@ export default function Logo({ variant = 'full', className = '', theme = 'dark' 
     );
   }
 
-  // Variante compact
+  // Variante compact — usa a imagem real com altura reduzida
   return (
-    <div className={`flex flex-row items-center gap-2.5 sm:gap-3.5 ${className} select-none`}>
-      <div className="relative shrink-0">
-        {LogoIcon}
-        <span className="absolute top-2 right-2 w-2 h-2 bg-[#22C55E] rounded-full border border-slate-950 animate-pulse" />
-      </div>
-      <div className="flex flex-col text-left select-text">
-        <div className="flex items-center gap-1">
-          <span className={`font-sans font-black tracking-widest text-base sm:text-lg leading-none ${textColor}`}>
-            PROVA
-          </span>
-          <div className="flex font-extrabold text-[#F59E0B] text-lg sm:text-xl leading-none font-sans select-none items-center">
-            <span style={{ color: logoXColor }} className="opacity-95">X</span>
-            <span className="text-[#F59E0B] -ml-1">X</span>
-          </div>
-          <span className="font-extrabold text-[11px] sm:text-xs text-[#EA580C] leading-none font-mono tracking-wider ml-0.5 self-end pb-0.5">
-            AI
-          </span>
-        </div>
-        <span className="text-[8px] sm:text-[9.5px] font-sans font-black text-slate-400 tracking-widest leading-none uppercase mt-1">
-          OPERAÇÕES PRF
-        </span>
-      </div>
+    <div className={`flex items-center ${className} select-none`}>
+      <img
+        src={theme === 'dark' ? logoDark : logoLight}
+        alt="ProvaX AI"
+        className="h-16 sm:h-20 md:h-24 w-auto object-contain"
+        draggable="false"
+      />
     </div>
   );
 }
