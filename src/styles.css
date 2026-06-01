@@ -1058,19 +1058,19 @@ aside#applet-sidebar,
 
 /* --- Modo escuro (override do remap dourado) --- */
 .prf-theme:not(.light-theme) .choice-cebraspe {
-  background-color: #181c3a !important;
-  border-color: #262b4f !important;
+  background-color: #11152a !important;
+  border-color: #1e2342 !important;
   color: #cbd5e1 !important;
 }
 .prf-theme:not(.light-theme) .choice-cebraspe-certo:hover {
   border-color: #10b981 !important;
   color: #6ee7b7 !important;
-  background-color: #11142b !important;
+  background-color: #0d1124 !important;
 }
 .prf-theme:not(.light-theme) .choice-cebraspe-errado:hover {
   border-color: #ef4444 !important;
   color: #fca5a5 !important;
-  background-color: #11142b !important;
+  background-color: #0d1124 !important;
 }
 .prf-theme:not(.light-theme) .choice-cebraspe-certo[data-selected="true"] {
   background-color: #059669 !important;
@@ -1098,35 +1098,35 @@ aside#applet-sidebar,
 .prf-theme:not(.light-theme) .hover\:bg-slate-800:hover,
 .prf-theme:not(.light-theme) .hover\:bg-slate-800\/60:hover,
 .prf-theme:not(.light-theme) .hover\:bg-slate-700:hover {
-  background-color: #1f234a !important;
+  background-color: #191e3c !important;
 }
 
 /* Tabelas — header, linhas zebradas, bordas */
 .prf-theme:not(.light-theme) table thead,
 .prf-theme:not(.light-theme) table thead tr,
 .prf-theme:not(.light-theme) table thead th {
-  background-color: #0e1124 !important;
-  border-color: #262b4f !important;
+  background-color: #080a16 !important;
+  border-color: #1e2342 !important;
   color: #e2e8f0 !important;
 }
 .prf-theme:not(.light-theme) table tbody tr {
-  background-color: #11142b !important;
-  border-color: #262b4f !important;
+  background-color: #0d1124 !important;
+  border-color: #1e2342 !important;
 }
 .prf-theme:not(.light-theme) table tbody tr:nth-child(even) {
-  background-color: #161a33 !important;
+  background-color: #11152a !important;
 }
 .prf-theme:not(.light-theme) table tbody tr:hover {
-  background-color: #1f234a !important;
+  background-color: #191e3c !important;
 }
 .prf-theme:not(.light-theme) table td,
 .prf-theme:not(.light-theme) table th {
-  border-color: #262b4f !important;
+  border-color: #1e2342 !important;
 }
 
 /* Gráficos — alinhar tracks/gauges ao novo tom indigo */
 .prf-theme:not(.light-theme) .stroke-emerald-950 {
-  stroke: #262b4f !important; /* track unificado com a borda */
+  stroke: #1e2342 !important; /* track unificado com a borda */
 }
 .prf-theme:not(.light-theme) #svg-line-graph line[stroke="#0f172a"],
 .prf-theme:not(.light-theme) #svg-line-graph line[stroke="#1e293b"] {
