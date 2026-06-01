@@ -138,7 +138,7 @@ export default function Dashboard({
       : `Bom desempenho geral. Mantenha a constância em ${worst.name} para garantir aprovação no próximo simulado.`;
 
   const BG         = isDark ? '#0B1120' : '#F5F3EE';
-  const SURFACE    = isDark ? '#111827' : '#ffffff';
+  const SURFACE    = isDark ? '#0a0d1a' : '#ffffff';
   const BORDER     = isDark ? '#1F2D45' : '#E8E0D0';
   const TXT        = isDark ? '#F1F5F9' : TEXT;
   const MTXT       = isDark ? '#64748B' : MUTED;
@@ -203,7 +203,7 @@ export default function Dashboard({
           const palette = {
             high: { bg: isDark ? '#2A1010' : '#FDECEC', border: isDark ? '#4A1515' : '#F5B7B1', accent: RED, iconBg: isDark ? '#3A1515' : '#FADBD8' },
             mid: { bg: isDark ? '#2A1E0A' : '#FFF6E5', border: isDark ? '#4A3010' : '#F5D8A0', accent: ORANGE, iconBg: isDark ? '#3A2810' : '#FCE9C7' },
-            low: { bg: BLUE_SOFT_D, border: BLUE_BOR_D, accent: BLUE, iconBg: isDark ? '#0D1F3C' : BLUE_ICON_BG },
+            low: { bg: BLUE_SOFT_D, border: BLUE_BOR_D, accent: BLUE, iconBg: isDark ? '#0e1428' : BLUE_ICON_BG },
           }[urgency];
 
           return (
