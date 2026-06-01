@@ -1,48 +1,63 @@
-## Objetivo
+## Diagnóstico
 
-Levar a paleta midnight indigo (do ajuste anterior) para o resto do dashboard de forma consistente e devolver as cores semânticas verde/vermelho nos botões Certo/Errado do simulado, em ambos os modos.
+**Azul atual no Dashboard (`src/components/Dashboard.tsx`)**
+- `BLUE = '#6366f1'` (indigo-500) é usado em texto, números grandes, ícones, barras, bordas e gradientes — o MESMO valor para light e dark mode.
+- Em dark mode, sobre o fundo `#06080f / #0a0d1a`, o `#6366f1` fica:
+  - Legível, porém com saturação alta — "puxa" a atenção e cria leve halo nos números grandes (ex.: "41.2%", contador de dias, "Foco na Meta, *Recruta*").
+  - Contraste WCAG ~5.2:1 sobre o card `#11152a` — passa AA, mas o tom escuro reduz vivacidade em telas com brilho médio.
+- Em light mode `#6366f1` sobre branco fica adequado (~4.8:1), então não precisa mudar.
 
-## Problema identificado
+**Conclusão:** o azul **não é o ideal em dark mode**. Ele deveria ser um pouco mais claro e levemente desaturado (periwinkle), para combinar com o midnight indigo da paleta e ganhar leveza tipográfica. Em light mode, dá pra escurecer um toque para reforçar hierarquia.
 
-Os overrides em `src/styles.css` para `.prf-theme:not(.light-theme)` remapeiam **todo `bg-emerald-500/600` e `text-emerald-*` para dourado** no modo escuro. Por isso o botão "Certo" aparece amarelo na imagem 1, mesmo o código usando `bg-emerald-600`. O "Errado" também perde contraste porque herda estilos genéricos de card.
+## Proposta — novo tom de azul
+
+| Token | Light | Dark | Uso |
+|---|---|---|---|
+| `BLUE` (principal) | `#4f46e5` (indigo-600) | `#818cf8` (indigo-400, periwinkle) | nome do usuário, números, ícones de ação |
+| `BLUE_DARK` | `#3730a3` | `#6366f1` | gradientes, hover |
+| `BLUE_SOFT` (bg leve) | `#EEF3FF` | `#0e1428` | fundo de cards "low" |
+| `BLUE_BORDER` | `#BFDBFE` | `#2a2f5a` | bordas suaves |
+| `BLUE_ICON_BG` | `#DBEAFE` | `#141a36` | fundo de pílula de ícone |
+| `BLUE_ICON_BORDER` | `#93C5FD` | `#2e3566` | borda da pílula |
+
+`#818cf8` (indigo-400) sobre `#11152a` tem contraste ~7.1:1, mais claro e elegante — combina com o tom dourado da marca sem competir.
 
 ## Mudanças
 
-### 1. Botões Certo / Errado do simulado (Simulados.tsx + styles.css)
+### 1. `src/components/Dashboard.tsx`
+- Converter as constantes `BLUE / BLUE_DARK / BLUE_BORDER / BLUE_ICON_BG / BLUE_ICON_BORDER` para serem **derivadas de `isDark`** (igual ao padrão já existente em `BLUE_SOFT_D`/`BLUE_BOR_D`).
+- Substituir os usos hard-coded pelas versões dependentes do tema:
+  - Saudação "Foco na Meta, *Nome*" — usa novo `BLUE`.
+  - Card "Probabilidade de Aprovação" (`approvalProb < CUT_SCORE`) — número grande e label.
+  - Gradiente da barra de probabilidade — `linear-gradient(90deg, BLUE_DARK, BLUE)`.
+  - Pílula "Questões resolvidas" + número 26pt.
+  - Cronograma da semana — borda/fundo/ícones do dia atual.
+  - Card "Próximo objetivo" (Shield azul) — ícone + label + barra de progresso.
+  - Botão CTA azul "Continuar treinamento".
 
-Reescrever o par de botões usando classes próprias (`#choice-cebraspe-certo` / `#choice-cebraspe-errado`) com regras dedicadas no CSS que **não passam pelo remap dourado**:
+### 2. `src/styles.css` — auditoria de consistência (paleta midnight indigo)
+Após análise, **apenas dois pontos** ainda destoam:
 
-- **Certo (selecionado)**: verde esmeralda sólido `#10b981` (claro) / `#059669` com glow sutil (escuro). Texto branco, borda `#34d399`.
-- **Certo (idle)**: card indigo `#181c3a` (escuro) / branco com borda `#cbd5e1` (claro); hover → borda verde + texto verde.
-- **Errado (selecionado)**: vermelho sólido `#dc2626` (claro) / `#ef4444` com glow (escuro). Texto branco, borda `#f87171`.
-- **Errado (idle)**: mesmo card neutro; hover → borda vermelha + texto vermelho.
-- Adicionar exceção explícita no override do dark mode para esses dois IDs, garantindo que o dourado não sobrescreva o verde/vermelho.
+- **Linha 417** — `stroke-emerald-950` em gauges ainda usa `#18223d` (antigo). Atualizar para `#262b4f` (alinhado às novas bordas).
+- **Linhas 426–434** — `#svg-line-graph` em Progresso: o nó dourado tem `stroke: #0a0f1d` (antigo `panel-navy`). Trocar por `#0a0d1a` (novo token).
 
-### 2. Consistência da paleta midnight indigo no dashboard
+Botões, links, tabelas e cartões já foram atualizados na rodada anterior e estão consistentes — confirmado lendo `bg-slate-800/850/900/950`, `border-slate-800`, `hover:bg-slate-800` e mapeamentos de `text-emerald-*`.
 
-Aplicar `#0b0d1c / #11142b / #181c3a / #262b4f` (tokens já criados) também em:
-
-- **Botões secundários e ghost** do dashboard: trocar `hover:bg-slate-800` por hover indigo `#1f234a` para combinar com cards.
-- **Links e ações**: garantir que `text-emerald-400` em links navegacionais continue mapeando pro dourado (acento da marca), mas links neutros usam `text-slate-300` com hover `text-amber-200`.
-- **Tabelas** (Progresso, Simulados resultado, Biblioteca): linhas zebradas com `#11142b` / `#161a33`, borda `#262b4f`, header `#0e1124`, hover de linha `#1f234a`.
-- **Gráficos** (Progresso `#svg-line-graph`, gauges): atualizar track de `#18223d` para `#262b4f` (alinhado à nova borda), grid lines com opacidade reduzida do mesmo tom, mantendo a linha dourada como destaque.
-- **Light mode**: nenhuma mudança nas cores claras existentes além das regras novas de Certo/Errado (verde/vermelho refinados).
-
-### 3. Modo claro — botões Certo/Errado
-
-Hoje no claro o "Certo" fica azul-marinho e "Errado" só com borda rosa. Padronizar:
-
-- Certo selecionado: `bg-emerald-600` + texto branco.
-- Errado selecionado: `bg-red-600` + texto branco.
-- Idle: card branco, borda `slate-200`, hover colorido.
+### 3. Verificação após mudanças
+- Abrir `/` (Dashboard) em dark mode no preview e conferir:
+  - Nome do usuário no header — periwinkle suave, não índigo gritante.
+  - "41.2%" e "26" — mesmo tom periwinkle.
+  - Card "Continuar treinamento" — gradiente harmonioso com o fundo.
+  - Cronograma "Hoje" — borda azul mais leve, sem competir com o card dourado abaixo.
+- Conferir Simulados e Progresso para garantir que gauges/linhas seguem o ouro/indigo correto.
 
 ## Arquivos afetados
 
-- `src/styles.css` — adicionar bloco de exceção para `#choice-cebraspe-certo/errado` em dark e light; atualizar tracks de gráfico, hovers de tabela/botão para os novos tons indigo.
-- `src/components/Simulados.tsx` — substituir as classes inline dos dois botões por classes utilitárias estáveis que o CSS dedicado consegue alvejar sem conflito.
+- `src/components/Dashboard.tsx` — derivar `BLUE*` de `isDark`.
+- `src/styles.css` — ajustar 2 strokes/fills residuais (linhas 417 e 428).
 
 ## Fora de escopo
 
-- Não mexer na lógica do simulado (seleção, navegação, gabarito).
-- Não alterar o acento dourado da marca (sidebar ativo, gauge de retenção, badges de plano).
-- Não tocar em landing page / onboarding.
+- Light mode mantém o tom atual (apenas pequeno ajuste opcional em `BLUE = #4f46e5`).
+- Sem mudanças em Simulados.tsx (paleta já refinada na rodada anterior).
+- Sem alteração no acento dourado da marca.

@@ -414,7 +414,7 @@ body {
 
 /* Map circular gauges & charts in dark mode to gorgeous gold & dark sapphire track */
 .prf-theme:not(.light-theme) .stroke-emerald-950 {
-  stroke: #18223d !important; /* Dark sapphire gauge circle track */
+  stroke: #262b4f !important; /* Indigo gauge track (alinhado às bordas) */
 }
 
 .prf-theme:not(.light-theme) .stroke-emerald-500 {
@@ -425,7 +425,7 @@ body {
 /* Custom charts nodes and grid tuning in Progresso */
 .prf-theme:not(.light-theme) #svg-line-graph circle {
   fill: #fbbf24 !important; /* Golden point nodes */
-  stroke: #0a0f1d !important;
+  stroke: #0a0d1a !important;
 }
 .prf-theme:not(.light-theme) #svg-line-graph text[fill="#059669"] {
   fill: #fbbf24 !important; /* Gold high-score line text indicator */

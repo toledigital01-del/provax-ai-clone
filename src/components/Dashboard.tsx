@@ -145,6 +145,12 @@ export default function Dashboard({
   const TRACK      = isDark ? '#1F2D45' : '#E5EAF2';
   const DIAG_TRACK = isDark ? '#1F2D45' : '#F1ECE1';
   const ITEM_BG    = isDark ? '#1A2540' : '#FAF7F0';
+  // Theme-aware indigo palette (shadows module constants for dark mode)
+  const BLUE              = isDark ? '#818cf8' : '#4f46e5';
+  const BLUE_DARK         = isDark ? '#6366f1' : '#3730a3';
+  const BLUE_BORDER       = isDark ? '#2a2f5a' : '#BFDBFE';
+  const BLUE_ICON_BG      = isDark ? '#141a36' : '#DBEAFE';
+  const BLUE_ICON_BORDER  = isDark ? '#2e3566' : '#93C5FD';
   const BLUE_SOFT_D  = isDark ? '#0e1428' : BLUE_SOFT;
   const BLUE_BOR_D   = isDark ? '#1e2342' : BLUE_BORDER;
 
