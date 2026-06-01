@@ -1020,3 +1020,116 @@ aside#applet-sidebar,
     transition-duration: 0.01ms !important;
   }
 }
+
+/* =============================================================
+   Botões Certo / Errado do Simulado (semântica verde/vermelho)
+   Regras de alta especificidade para escapar do remap dourado.
+   ============================================================= */
+
+/* --- Base (modo claro) --- */
+.choice-cebraspe {
+  background-color: #ffffff;
+  border-color: #cbd5e1;
+  color: #1e293b;
+}
+.choice-cebraspe-certo:hover {
+  border-color: #10b981 !important;
+  color: #047857 !important;
+  background-color: #ecfdf5 !important;
+}
+.choice-cebraspe-errado:hover {
+  border-color: #ef4444 !important;
+  color: #b91c1c !important;
+  background-color: #fef2f2 !important;
+}
+.choice-cebraspe-certo[data-selected="true"] {
+  background-color: #059669 !important;
+  border-color: #34d399 !important;
+  color: #ffffff !important;
+  box-shadow: 0 8px 24px -8px rgba(16, 185, 129, 0.55), 0 0 0 2px rgba(52, 211, 153, 0.25) !important;
+}
+.choice-cebraspe-errado[data-selected="true"] {
+  background-color: #dc2626 !important;
+  border-color: #f87171 !important;
+  color: #ffffff !important;
+  box-shadow: 0 8px 24px -8px rgba(220, 38, 38, 0.55), 0 0 0 2px rgba(248, 113, 113, 0.25) !important;
+}
+.choice-cebraspe[data-selected="true"] span { color: #ffffff !important; opacity: 1 !important; }
+
+/* --- Modo escuro (override do remap dourado) --- */
+.prf-theme:not(.light-theme) .choice-cebraspe {
+  background-color: #181c3a !important;
+  border-color: #262b4f !important;
+  color: #cbd5e1 !important;
+}
+.prf-theme:not(.light-theme) .choice-cebraspe-certo:hover {
+  border-color: #10b981 !important;
+  color: #6ee7b7 !important;
+  background-color: #11142b !important;
+}
+.prf-theme:not(.light-theme) .choice-cebraspe-errado:hover {
+  border-color: #ef4444 !important;
+  color: #fca5a5 !important;
+  background-color: #11142b !important;
+}
+.prf-theme:not(.light-theme) .choice-cebraspe-certo[data-selected="true"] {
+  background-color: #059669 !important;
+  border-color: #34d399 !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 32px -10px rgba(16, 185, 129, 0.7), 0 0 0 2px rgba(52, 211, 153, 0.3) !important;
+}
+.prf-theme:not(.light-theme) .choice-cebraspe-errado[data-selected="true"] {
+  background-color: #dc2626 !important;
+  border-color: #f87171 !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 32px -10px rgba(220, 38, 38, 0.7), 0 0 0 2px rgba(248, 113, 113, 0.3) !important;
+}
+.prf-theme:not(.light-theme) .choice-cebraspe[data-selected="true"] span,
+.prf-theme:not(.light-theme) .choice-cebraspe[data-selected="true"] * {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* =============================================================
+   Consistência da paleta Midnight Indigo no dashboard escuro
+   ============================================================= */
+
+/* Hover de botões ghost/secundários e linhas de tabela */
+.prf-theme:not(.light-theme) .hover\:bg-slate-800:hover,
+.prf-theme:not(.light-theme) .hover\:bg-slate-800\/60:hover,
+.prf-theme:not(.light-theme) .hover\:bg-slate-700:hover {
+  background-color: #1f234a !important;
+}
+
+/* Tabelas — header, linhas zebradas, bordas */
+.prf-theme:not(.light-theme) table thead,
+.prf-theme:not(.light-theme) table thead tr,
+.prf-theme:not(.light-theme) table thead th {
+  background-color: #0e1124 !important;
+  border-color: #262b4f !important;
+  color: #e2e8f0 !important;
+}
+.prf-theme:not(.light-theme) table tbody tr {
+  background-color: #11142b !important;
+  border-color: #262b4f !important;
+}
+.prf-theme:not(.light-theme) table tbody tr:nth-child(even) {
+  background-color: #161a33 !important;
+}
+.prf-theme:not(.light-theme) table tbody tr:hover {
+  background-color: #1f234a !important;
+}
+.prf-theme:not(.light-theme) table td,
+.prf-theme:not(.light-theme) table th {
+  border-color: #262b4f !important;
+}
+
+/* Gráficos — alinhar tracks/gauges ao novo tom indigo */
+.prf-theme:not(.light-theme) .stroke-emerald-950 {
+  stroke: #262b4f !important; /* track unificado com a borda */
+}
+.prf-theme:not(.light-theme) #svg-line-graph line[stroke="#0f172a"],
+.prf-theme:not(.light-theme) #svg-line-graph line[stroke="#1e293b"] {
+  stroke: rgba(38, 43, 79, 0.6) !important;
+}
+

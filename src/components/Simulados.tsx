@@ -316,11 +316,9 @@ export default function Simulados({ onSimuladoFinished }: SimuladosProps) {
               <div className="grid grid-cols-2 gap-4">
                 <button
                   onClick={() => selectAnswer('C')}
-                  className={`p-4 rounded-xl border font-bold text-center transition-all focus:outline-none ${
-                    answers[currentExamQuestions[currentIdx]?.id] === 'C'
-                      ? 'bg-emerald-600 border-emerald-500 text-white ring-2 ring-emerald-400/30 shadow-lg'
-                      : 'bg-slate-950 border-slate-800 text-slate-300 hover:border-emerald-700/50 hover:text-emerald-400'
-                  }`}
+                  data-choice="certo"
+                  data-selected={answers[currentExamQuestions[currentIdx]?.id] === 'C' ? 'true' : 'false'}
+                  className="choice-cebraspe choice-cebraspe-certo p-4 rounded-xl border font-bold text-center transition-all focus:outline-none"
                   id="choice-cebraspe-certo"
                 >
                   <span className="block text-lg">Certo</span>
@@ -328,17 +326,16 @@ export default function Simulados({ onSimuladoFinished }: SimuladosProps) {
                 </button>
                 <button
                   onClick={() => selectAnswer('E')}
-                  className={`p-4 rounded-xl border font-bold text-center transition-all focus:outline-none ${
-                    answers[currentExamQuestions[currentIdx]?.id] === 'E'
-                      ? 'bg-red-600 border-red-500 text-white ring-2 ring-red-400/30 shadow-lg'
-                      : 'bg-slate-950 border-slate-800 text-slate-300 hover:border-red-700/50 hover:text-red-400'
-                  }`}
+                  data-choice="errado"
+                  data-selected={answers[currentExamQuestions[currentIdx]?.id] === 'E' ? 'true' : 'false'}
+                  className="choice-cebraspe choice-cebraspe-errado p-4 rounded-xl border font-bold text-center transition-all focus:outline-none"
                   id="choice-cebraspe-errado"
                 >
                   <span className="block text-lg">Errado</span>
                   <span className="text-[10px] font-mono opacity-60">(Assertiva Falsa)</span>
                 </button>
               </div>
+
 
               {/* Keyboard hints */}
               <div className="flex justify-center gap-6 text-[9px] font-mono text-slate-700 select-none -mt-1">
