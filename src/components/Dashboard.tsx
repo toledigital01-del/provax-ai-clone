@@ -15,8 +15,8 @@ interface DashboardProps {
 }
 
 // Palette — PRF Blue
-const BLUE = '#1B4FD8';
-const BLUE_DARK = '#1339A8';
+const BLUE = '#6366f1';
+const BLUE_DARK = '#4338ca';
 const BLUE_SOFT = '#EEF3FF';
 const BLUE_BORDER = '#BFDBFE';
 const BLUE_ICON_BG = '#DBEAFE';
