@@ -35,6 +35,30 @@ export default function App() {
   // ── Autenticação Supabase ──────────────────────────────────
   const { user, loading: authLoading, initialized } = useAuth();
 
+  // Carregar perfil do Supabase quando usuário loga
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single()
+      .then(({ data }) => {
+        if (data?.name && !onboarding) {
+          // Usuário já tem perfil — preencher onboarding com dados do banco
+          setOnboarding({
+            name: data.name,
+            role: 'PRF',
+            hoursPerDay: data.hours_per_day || 4,
+            testDate: data.test_date || '2026-12-15',
+            difficulties: data.difficulties || [],
+            hasDoneExam: data.has_done_exam || false,
+            selectedLanguage: data.language || 'Inglês',
+          });
+        }
+      });
+  }, [user]);
+
   // Theme state choice: 'dark' | 'light'
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
     if (typeof localStorage === 'undefined') return 'dark';
