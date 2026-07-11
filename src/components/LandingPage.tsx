@@ -78,8 +78,51 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
     }, 2200);
   };
 
+  if (legalPage) {
+    const isTerms = legalPage === 'terms';
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-[#11182d] via-[#0d1424] to-[#080d19] text-slate-100 font-sans">
+        <div className="max-w-3xl mx-auto px-6 py-16">
+          <button
+            onClick={() => setLegalPage(null)}
+            className="mb-8 text-xs font-mono font-bold text-amber-400 hover:text-amber-300 uppercase tracking-widest cursor-pointer"
+          >
+            ← Voltar ao site
+          </button>
+          <h1 className="text-3xl font-black text-white mb-6">
+            {isTerms ? 'Termos de Serviço' : 'Política de Privacidade'}
+          </h1>
+          <div className="space-y-4 text-sm text-slate-300 leading-relaxed">
+            {isTerms ? (
+              <>
+                <p>Ao utilizar a plataforma ProvaX AI, você concorda com os termos aqui descritos. A plataforma oferece ferramentas de estudo baseadas em inteligência artificial para candidatos ao concurso da Polícia Rodoviária Federal (PRF).</p>
+                <p><strong className="text-white">1. Uso da plataforma.</strong> O acesso é pessoal e intransferível. É proibido compartilhar credenciais ou revender o serviço.</p>
+                <p><strong className="text-white">2. Pagamentos e cancelamento.</strong> Assinaturas podem ser canceladas a qualquer momento pelo painel do usuário. Reembolsos seguem o Código de Defesa do Consumidor (7 dias).</p>
+                <p><strong className="text-white">3. Conteúdo gerado por IA.</strong> Explicações, questões e sugestões produzidas pela Athena são apoio de estudo e não substituem material oficial do edital.</p>
+                <p><strong className="text-white">4. Propriedade intelectual.</strong> Toda a interface, marca e códigos são de propriedade da ProvaX AI e protegidos por lei.</p>
+                <p><strong className="text-white">5. Alterações.</strong> Estes termos podem ser atualizados a qualquer tempo, com aviso prévio de 15 dias por e-mail.</p>
+                <p className="text-xs text-slate-500 pt-6">Última atualização: 11 de julho de 2026 · Dúvidas: contato@provaxai.com.br</p>
+              </>
+            ) : (
+              <>
+                <p>Sua privacidade é prioridade. Esta política descreve quais dados coletamos e como são tratados.</p>
+                <p><strong className="text-white">1. Dados coletados.</strong> Nome, e-mail, progresso de estudos e histórico de interações com a Athena. Dados de pagamento são processados por parceiros PCI-DSS certificados; não armazenamos números de cartão.</p>
+                <p><strong className="text-white">2. Uso dos dados.</strong> Personalização do cronograma, cálculo da probabilidade preditiva e melhoria contínua da IA. Não vendemos nem compartilhamos dados com terceiros para fins de marketing.</p>
+                <p><strong className="text-white">3. LGPD.</strong> Você pode solicitar acesso, correção, portabilidade ou exclusão dos seus dados a qualquer momento por contato@provaxai.com.br.</p>
+                <p><strong className="text-white">4. Cookies.</strong> Utilizamos cookies estritamente necessários para autenticação e preferências (tema claro/escuro).</p>
+                <p><strong className="text-white">5. Segurança.</strong> Criptografia em trânsito (TLS) e em repouso. Autenticação com Supabase Auth. Backups diários redundantes.</p>
+                <p className="text-xs text-slate-500 pt-6">Última atualização: 11 de julho de 2026 · Encarregado (DPO): contato@provaxai.com.br</p>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#11182d] via-[#0d1424] to-[#080d19] text-slate-100 font-sans selection:bg-amber-500/20 selection:text-white" id="landing-container">
+
       
       {/* 1 + 2. PRE-HEADER + NAVBAR — fixed container */}
       <div className="fixed top-0 left-0 right-0 z-50">
