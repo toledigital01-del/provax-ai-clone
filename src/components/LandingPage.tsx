@@ -23,6 +23,8 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
   const [showFloatingCTA, setShowFloatingCTA] = useState(false);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [isSticky, setIsSticky] = useState(false);
+  const [legalPage, setLegalPage] = useState<null | 'terms' | 'privacy'>(null);
+
 
   // Playground interactive state
   const [activePlaygroundTab, setActivePlaygroundTab] = useState<'dashboard' | 'treinar' | 'cronograma' | 'simulados'>('dashboard');
