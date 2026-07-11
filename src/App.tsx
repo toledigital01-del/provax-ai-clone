@@ -3,6 +3,8 @@ import { useLocalStorage } from './hooks/useLocalStorage';
 import { useAuth } from './hooks/useAuth';
 import AuthPage from './components/AuthPage';
 import { supabase } from './lib/supabase';
+import { isAdminUser } from './lib/admin';
+
 import { UserOnboarding, StudySchedule, ProgressData, StudyTask, DailyMission, LibraryItem, Message, DaySchedule, TaskType, EditalTopic } from './types';
 import Onboarding from './components/Onboarding';
 import StreakWidget from './components/StreakWidget';
