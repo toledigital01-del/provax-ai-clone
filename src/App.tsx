@@ -898,11 +898,8 @@ export default function App() {
     if (!inOnboardingFlow) {
       return (
         <LandingPage
-          onStartOnboarding={() => setInOnboardingFlow(true)}
-          onLoginDirectly={() => {
-            // Redireciona para login ao clicar em "Entrar"
-            setInOnboardingFlow(true);
-          }}
+          onStartOnboarding={() => { setAuthInitialMode('register'); setInOnboardingFlow(true); }}
+          onLoginDirectly={() => { setAuthInitialMode('login'); setInOnboardingFlow(true); }}
         />
       );
     }
@@ -910,6 +907,7 @@ export default function App() {
     return (
       <AuthPage
         theme={theme}
+        initialMode={authInitialMode}
         onAuth={() => {
           setInOnboardingFlow(false);
         }}
@@ -918,6 +916,7 @@ export default function App() {
   }
 
   if (!onboarding) {
+
     if (!inOnboardingFlow) {
       return (
         <LandingPage
