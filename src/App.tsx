@@ -718,7 +718,7 @@ export default function App() {
 
       setProgress(old => ({
         ...old,
-        currentApprovalProbability: Math.min(99.8, old.currentApprovalProbability + 0.1)
+        currentApprovalProbability: Math.min(99.8, Math.round((old.currentApprovalProbability + 0.1) * 10) / 10)
       }));
     } catch (err) {
       console.error(err);
