@@ -945,6 +945,11 @@ export default function App() {
   }
 
   if (currentTab === 'admin') {
+    if (!isAdmin) {
+      // Acesso negado — redireciona silenciosamente ao dashboard
+      setCurrentTab('dashboard');
+      return null;
+    }
     return (
       <AdminPanel 
         onBack={() => {
@@ -971,6 +976,7 @@ export default function App() {
       approvalProb={progress.currentApprovalProbability}
       streak={progress.daysConsecutive}
       subscriptionPlan={subscriptionPlan}
+      isAdmin={isAdmin}
     >
       <div className={`prf-theme ${theme === 'light' ? 'light-theme' : ''}`}>
         {renderActiveTab()}
@@ -978,3 +984,4 @@ export default function App() {
     </AppShell>
   );
 }
+
