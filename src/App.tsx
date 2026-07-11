@@ -89,6 +89,9 @@ export default function App() {
   // Onboarding metadata state — persistido
   const [onboarding, setOnboarding] = useLocalStorage<UserOnboarding | null>('provax-onboarding', null);
   const [inOnboardingFlow, setInOnboardingFlow] = useState<boolean>(false);
+  const [authInitialMode, setAuthInitialMode] = useState<'login' | 'register'>('login');
+  const isAdmin = isAdminUser(user);
+
 
   const handleLoginDirectly = () => {
     playSuccessSound();
