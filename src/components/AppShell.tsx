@@ -26,6 +26,7 @@ interface AppShellProps {
   streak: number;
   subscriptionPlan: string;
   urgentCount?: number;
+  isAdmin?: boolean;
   children: React.ReactNode;
 }
 
@@ -43,8 +44,9 @@ const NAV_ITEMS: NavItem[] = [
 
 export default function AppShell({
   currentTab, onTabChange, onLogout, theme, onToggleTheme,
-  userName, approvalProb, streak, subscriptionPlan, urgentCount = 0, children
+  userName, approvalProb, streak, subscriptionPlan, urgentCount = 0, isAdmin = false, children
 }: AppShellProps) {
+
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
