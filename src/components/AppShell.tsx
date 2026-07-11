@@ -161,8 +161,8 @@ export default function AppShell({
         })}
       </nav>
 
-      {/* Admin */}
-      {(!collapsed || mobile) && (
+      {/* Admin — apenas para admins autenticados */}
+      {isAdmin && (!collapsed || mobile) && (
         <div className={`px-3 py-2 border-t ${sidebarBorder}`}>
           <button
             onClick={() => onTabChange('admin')}
@@ -177,6 +177,7 @@ export default function AppShell({
           </button>
         </div>
       )}
+
 
       {/* User info */}
       <div className={`p-3 border-t ${sidebarBorder}`}>
