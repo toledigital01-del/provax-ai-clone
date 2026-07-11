@@ -1196,8 +1196,9 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
             <div className="md:col-span-3 space-y-3 text-left">
               <span className="text-[11px] font-bold text-white uppercase tracking-wider block">Informações Legais</span>
               <ul className="space-y-2 font-sans text-slate-400">
-                <li><span className="hover:text-white cursor-pointer transition-colors">Termos de Serviço</span></li>
-                <li><span className="hover:text-white cursor-pointer transition-colors">Políticas de Privacidade</span></li>
+                <li><button onClick={() => setLegalPage('terms')} className="hover:text-white cursor-pointer transition-colors text-left">Termos de Serviço</button></li>
+                <li><button onClick={() => setLegalPage('privacy')} className="hover:text-white cursor-pointer transition-colors text-left">Políticas de Privacidade</button></li>
+
                 <li><span className="text-slate-500 text-[11px] block">Suporte: contato@provaxai.com.br</span></li>
               </ul>
             </div>
