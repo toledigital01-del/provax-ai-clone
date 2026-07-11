@@ -3,6 +3,8 @@ import { useLocalStorage } from './hooks/useLocalStorage';
 import { useAuth } from './hooks/useAuth';
 import AuthPage from './components/AuthPage';
 import { supabase } from './lib/supabase';
+import { isAdminUser } from './lib/admin';
+
 import { UserOnboarding, StudySchedule, ProgressData, StudyTask, DailyMission, LibraryItem, Message, DaySchedule, TaskType, EditalTopic } from './types';
 import Onboarding from './components/Onboarding';
 import StreakWidget from './components/StreakWidget';
@@ -87,6 +89,9 @@ export default function App() {
   // Onboarding metadata state — persistido
   const [onboarding, setOnboarding] = useLocalStorage<UserOnboarding | null>('provax-onboarding', null);
   const [inOnboardingFlow, setInOnboardingFlow] = useState<boolean>(false);
+  const [authInitialMode, setAuthInitialMode] = useState<'login' | 'register'>('login');
+  const isAdmin = isAdminUser(user);
+
 
   const handleLoginDirectly = () => {
     playSuccessSound();
@@ -713,7 +718,7 @@ export default function App() {
 
       setProgress(old => ({
         ...old,
-        currentApprovalProbability: Math.min(99.8, old.currentApprovalProbability + 0.1)
+        currentApprovalProbability: Math.min(99.8, Math.round((old.currentApprovalProbability + 0.1) * 10) / 10)
       }));
     } catch (err) {
       console.error(err);
@@ -893,11 +898,8 @@ export default function App() {
     if (!inOnboardingFlow) {
       return (
         <LandingPage
-          onStartOnboarding={() => setInOnboardingFlow(true)}
-          onLoginDirectly={() => {
-            // Redireciona para login ao clicar em "Entrar"
-            setInOnboardingFlow(true);
-          }}
+          onStartOnboarding={() => { setAuthInitialMode('register'); setInOnboardingFlow(true); }}
+          onLoginDirectly={() => { setAuthInitialMode('login'); setInOnboardingFlow(true); }}
         />
       );
     }
@@ -905,6 +907,7 @@ export default function App() {
     return (
       <AuthPage
         theme={theme}
+        initialMode={authInitialMode}
         onAuth={() => {
           setInOnboardingFlow(false);
         }}
@@ -913,6 +916,7 @@ export default function App() {
   }
 
   if (!onboarding) {
+
     if (!inOnboardingFlow) {
       return (
         <LandingPage
@@ -941,6 +945,11 @@ export default function App() {
   }
 
   if (currentTab === 'admin') {
+    if (!isAdmin) {
+      // Acesso negado — redireciona silenciosamente ao dashboard
+      setCurrentTab('dashboard');
+      return null;
+    }
     return (
       <AdminPanel 
         onBack={() => {
@@ -967,6 +976,7 @@ export default function App() {
       approvalProb={progress.currentApprovalProbability}
       streak={progress.daysConsecutive}
       subscriptionPlan={subscriptionPlan}
+      isAdmin={isAdmin}
     >
       <div className={`prf-theme ${theme === 'light' ? 'light-theme' : ''}`}>
         {renderActiveTab()}
@@ -974,3 +984,4 @@ export default function App() {
     </AppShell>
   );
 }
+

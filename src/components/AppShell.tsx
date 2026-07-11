@@ -26,6 +26,7 @@ interface AppShellProps {
   streak: number;
   subscriptionPlan: string;
   urgentCount?: number;
+  isAdmin?: boolean;
   children: React.ReactNode;
 }
 
@@ -43,12 +44,15 @@ const NAV_ITEMS: NavItem[] = [
 
 export default function AppShell({
   currentTab, onTabChange, onLogout, theme, onToggleTheme,
-  userName, approvalProb, streak, subscriptionPlan, urgentCount = 0, children
+  userName, approvalProb, streak, subscriptionPlan, urgentCount = 0, isAdmin = false, children
 }: AppShellProps) {
+
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [notifOpen, setNotifOpen] = useState(false);
+
 
   const isDark = theme === 'dark';
 
@@ -159,8 +163,8 @@ export default function AppShell({
         })}
       </nav>
 
-      {/* Admin */}
-      {(!collapsed || mobile) && (
+      {/* Admin — apenas para admins autenticados */}
+      {isAdmin && (!collapsed || mobile) && (
         <div className={`px-3 py-2 border-t ${sidebarBorder}`}>
           <button
             onClick={() => onTabChange('admin')}
@@ -175,6 +179,7 @@ export default function AppShell({
           </button>
         </div>
       )}
+
 
       {/* User info */}
       <div className={`p-3 border-t ${sidebarBorder}`}>
@@ -280,27 +285,48 @@ export default function AppShell({
             </div>
 
             {/* Notificações */}
-            <button className={`relative p-2 rounded-lg cursor-pointer transition-all ${isDark ? 'text-slate-500 hover:text-white hover:bg-white/[0.06]' : 'text-slate-400 hover:text-slate-700 hover:bg-slate-100'}`}>
-              <Bell className="w-4 h-4" />
-              {urgentCount > 0 && (
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
+            <div className="relative">
+              <button
+                onClick={() => setNotifOpen(v => !v)}
+                className={`relative p-2 rounded-lg cursor-pointer transition-all ${isDark ? 'text-slate-500 hover:text-white hover:bg-white/[0.06]' : 'text-slate-400 hover:text-slate-700 hover:bg-slate-100'}`}
+              >
+                <Bell className="w-4 h-4" />
+                {urgentCount > 0 && (
+                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
+                )}
+              </button>
+              {notifOpen && (
+                <div className={`absolute right-0 top-full mt-2 w-72 rounded-xl border shadow-xl z-40 ${isDark ? 'bg-[#0d1117] border-white/[0.08]' : 'bg-white border-slate-200'}`}>
+                  <div className={`px-4 py-3 border-b ${sidebarBorder}`}>
+                    <p className={`text-xs font-black uppercase tracking-widest ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>Notificações</p>
+                  </div>
+                  <div className="p-4 text-center">
+                    <p className={`text-xs ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>Você está em dia. Nenhuma notificação nova.</p>
+                  </div>
+                </div>
               )}
-            </button>
+            </div>
 
             {/* Tema */}
             <button
               onClick={onToggleTheme}
+              title="Alternar tema"
               className={`p-2 rounded-lg cursor-pointer transition-all ${isDark ? 'text-slate-500 hover:text-white hover:bg-white/[0.06]' : 'text-slate-400 hover:text-slate-700 hover:bg-slate-100'}`}
             >
               {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-indigo-400" />}
             </button>
 
-            {/* Avatar */}
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-600 to-indigo-800 flex items-center justify-center text-xs font-black text-white cursor-pointer shrink-0">
+            {/* Avatar → Meu Plano */}
+            <button
+              onClick={() => onTabChange('planos')}
+              title="Meu plano"
+              className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-600 to-indigo-800 flex items-center justify-center text-xs font-black text-white cursor-pointer shrink-0 hover:scale-105 transition-transform"
+            >
               {userName.slice(0, 1)}
-            </div>
+            </button>
           </div>
         </header>
+
 
         {/* Content */}
         <main className="flex-1 overflow-y-auto">

@@ -100,12 +100,13 @@ export default function Planos({ currentPlanId, onPlanUpgraded, theme = 'dark' }
             return (
               <div
                 key={plan.id}
-                className={`relative rounded-2xl border p-6 flex flex-col transition-all
+                className={`relative rounded-2xl border p-6 ${meta.badge ? 'pt-9 mt-4' : ''} flex flex-col transition-all
                   ${isPremium
                     ? 'bg-gradient-to-b from-[#1a1000] via-[#120d00] to-[#0d1117] shadow-2xl shadow-amber-500/15 scale-[1.02]'
                     : cardBg}
                   ${meta.accentClass}`}
               >
+
                 {/* Barra superior dourada no premium */}
                 {isPremium && (
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent rounded-t-2xl" />

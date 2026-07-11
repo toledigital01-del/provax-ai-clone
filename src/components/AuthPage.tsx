@@ -8,12 +8,14 @@ type AuthMode = 'login' | 'register' | 'reset';
 interface AuthPageProps {
   onAuth: () => void;
   theme?: 'dark' | 'light';
+  initialMode?: AuthMode;
 }
 
-export default function AuthPage({ onAuth, theme = 'dark' }: AuthPageProps) {
+export default function AuthPage({ onAuth, theme = 'dark', initialMode = 'login' }: AuthPageProps) {
   const d = theme === 'dark';
 
-  const [mode, setMode] = useState<AuthMode>('login');
+  const [mode, setMode] = useState<AuthMode>(initialMode);
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

@@ -10,9 +10,6 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 import { nitro } from "nitro/vite";
 
 export default defineConfig({
-  // Disable the Cloudflare Workers build plugin (was used for the previous
-  // Cloudflare target). Nitro handles the server bundle instead.
-  cloudflare: false,
   tanstackStart: {
     server: { entry: "server" },
   },
@@ -20,3 +17,4 @@ export default defineConfig({
     plugins: [nitro()],
   },
 });
+
