@@ -16,6 +16,7 @@ import { Route as ApiFetchDriveFolderRouteImport } from './routes/api/fetch-driv
 import { Route as ApiFetchDriveRouteImport } from './routes/api/fetch-drive'
 import { Route as ApiChatAthenaRouteImport } from './routes/api/chat-athena'
 import { Route as ApiAnalyzeLibraryRouteImport } from './routes/api/analyze-library'
+import { Route as ApiStripeWebhookRouteImport } from './routes/api/stripe/webhook'
 import { Route as ApiStripeCreateCheckoutSessionRouteImport } from './routes/api/stripe/create-checkout-session'
 
 const IndexRoute = IndexRouteImport.update({
@@ -53,6 +54,11 @@ const ApiAnalyzeLibraryRoute = ApiAnalyzeLibraryRouteImport.update({
   path: '/api/analyze-library',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiStripeWebhookRoute = ApiStripeWebhookRouteImport.update({
+  id: '/api/stripe/webhook',
+  path: '/api/stripe/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiStripeCreateCheckoutSessionRoute =
   ApiStripeCreateCheckoutSessionRouteImport.update({
     id: '/api/stripe/create-checkout-session',
@@ -69,6 +75,7 @@ export interface FileRoutesByFullPath {
   '/api/generate-question': typeof ApiGenerateQuestionRoute
   '/api/generate-schedule': typeof ApiGenerateScheduleRoute
   '/api/stripe/create-checkout-session': typeof ApiStripeCreateCheckoutSessionRoute
+  '/api/stripe/webhook': typeof ApiStripeWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -79,6 +86,7 @@ export interface FileRoutesByTo {
   '/api/generate-question': typeof ApiGenerateQuestionRoute
   '/api/generate-schedule': typeof ApiGenerateScheduleRoute
   '/api/stripe/create-checkout-session': typeof ApiStripeCreateCheckoutSessionRoute
+  '/api/stripe/webhook': typeof ApiStripeWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -90,6 +98,7 @@ export interface FileRoutesById {
   '/api/generate-question': typeof ApiGenerateQuestionRoute
   '/api/generate-schedule': typeof ApiGenerateScheduleRoute
   '/api/stripe/create-checkout-session': typeof ApiStripeCreateCheckoutSessionRoute
+  '/api/stripe/webhook': typeof ApiStripeWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -102,6 +111,7 @@ export interface FileRouteTypes {
     | '/api/generate-question'
     | '/api/generate-schedule'
     | '/api/stripe/create-checkout-session'
+    | '/api/stripe/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -112,6 +122,7 @@ export interface FileRouteTypes {
     | '/api/generate-question'
     | '/api/generate-schedule'
     | '/api/stripe/create-checkout-session'
+    | '/api/stripe/webhook'
   id:
     | '__root__'
     | '/'
@@ -122,6 +133,7 @@ export interface FileRouteTypes {
     | '/api/generate-question'
     | '/api/generate-schedule'
     | '/api/stripe/create-checkout-session'
+    | '/api/stripe/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -133,6 +145,7 @@ export interface RootRouteChildren {
   ApiGenerateQuestionRoute: typeof ApiGenerateQuestionRoute
   ApiGenerateScheduleRoute: typeof ApiGenerateScheduleRoute
   ApiStripeCreateCheckoutSessionRoute: typeof ApiStripeCreateCheckoutSessionRoute
+  ApiStripeWebhookRoute: typeof ApiStripeWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -186,6 +199,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAnalyzeLibraryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/stripe/webhook': {
+      id: '/api/stripe/webhook'
+      path: '/api/stripe/webhook'
+      fullPath: '/api/stripe/webhook'
+      preLoaderRoute: typeof ApiStripeWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/stripe/create-checkout-session': {
       id: '/api/stripe/create-checkout-session'
       path: '/api/stripe/create-checkout-session'
@@ -205,6 +225,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiGenerateQuestionRoute: ApiGenerateQuestionRoute,
   ApiGenerateScheduleRoute: ApiGenerateScheduleRoute,
   ApiStripeCreateCheckoutSessionRoute: ApiStripeCreateCheckoutSessionRoute,
+  ApiStripeWebhookRoute: ApiStripeWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
