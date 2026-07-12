@@ -856,6 +856,8 @@ export default function App() {
             theme={theme}
             currentPlanId={subscriptionPlan}
             onPlanUpgraded={(newPlan: 'free' | 'essencial' | 'premium') => setSubscriptionPlan(newPlan)}
+            userId={user?.id}
+            userEmail={user?.email}
           />
         );
       case 'contran':
