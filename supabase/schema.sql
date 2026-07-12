@@ -18,6 +18,9 @@ create table if not exists public.profiles (
   difficulties  text[] default '{}',
   has_done_exam boolean default false,
   language      text default 'Inglês',
+  stripe_customer_id     text,
+  stripe_subscription_id text,
+  subscription_status    text default 'inactive',
   created_at    timestamptz default now(),
   updated_at    timestamptz default now()
 );
