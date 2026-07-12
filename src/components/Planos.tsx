@@ -1,54 +1,55 @@
 import React, { useState } from 'react';
 import { SUBSCRIPTION_PLANS } from '../data/mockData';
-import { CreditCard, ShieldCheck, Sparkles, AlertCircle, CheckCircle, X, Loader2, Gift, Zap } from 'lucide-react';
+import { ShieldCheck, Sparkles, Gift, Loader2 } from 'lucide-react';
 
 interface PlanosProps {
   currentPlanId: 'free' | 'essencial' | 'premium';
   onPlanUpgraded: (planId: 'free' | 'essencial' | 'premium') => void;
   theme?: 'dark' | 'light';
+  userId?: string;
+  userEmail?: string;
 }
 
-export default function Planos({ currentPlanId, onPlanUpgraded, theme = 'dark' }: PlanosProps) {
+export default function Planos({ currentPlanId, onPlanUpgraded, theme = 'dark', userId, userEmail }: PlanosProps) {
   const d = theme === 'dark';
-  const [selectedPlan, setSelectedPlan] = useState<any | null>(null);
-  const [showModal, setShowModal] = useState(false);
-  const [cardNumber, setCardNumber] = useState('');
-  const [cardExpiry, setCardExpiry] = useState('');
-  const [cardCvc, setCardCvc] = useState('');
-  const [cardName, setCardName] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [loadingPlanId, setLoadingPlanId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleBuy = (plan: any) => {
-    setSelectedPlan(plan);
-    setShowModal(true);
-    setSuccess(false);
-  };
+  const handleBuy = async (plan: any) => {
+    setError(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setSuccess(true);
-      setTimeout(() => {
-        onPlanUpgraded(selectedPlan.id);
-        setShowModal(false);
-        setSelectedPlan(null);
-      }, 1500);
-    }, 2000);
+    if (plan.price === 0) {
+      onPlanUpgraded(plan.id);
+      return;
+    }
+
+    if (!userId || !userEmail) {
+      setError('Você precisa estar logado para assinar um plano.');
+      return;
+    }
+
+    setLoadingPlanId(plan.id);
+    try {
+      const res = await fetch('/api/stripe/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ planId: plan.id, userId, userEmail }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data?.url) {
+        throw new Error(data?.error || 'Falha ao iniciar checkout.');
+      }
+      window.location.href = data.url;
+    } catch (err: any) {
+      setError(err?.message || 'Erro inesperado ao processar pagamento.');
+      setLoadingPlanId(null);
+    }
   };
 
   // Tokens de tema
   const txt  = d ? 'text-white'     : 'text-slate-900';
-  const mut  = d ? 'text-slate-400' : 'text-slate-500';
-  const fnt  = d ? 'text-slate-500' : 'text-slate-400';
   const bdr  = d ? 'border-white/[0.06]' : 'border-slate-200';
   const cardBg = d ? 'bg-[#0d1117]' : 'bg-white';
-  const modalBg = d ? 'bg-[#0d1117] border border-white/[0.08]' : 'bg-white border border-slate-200 shadow-xl';
-  const inp  = d
-    ? 'bg-[#131a27] border border-white/[0.08] focus:border-indigo-500/60 text-white placeholder-slate-600'
-    : 'bg-slate-50 border border-slate-200 focus:border-indigo-400 text-slate-900 placeholder-slate-400';
 
   const planMeta: Record<string, { badge?: string; highlight: boolean; accentClass: string; btnClass: string }> = {
     free:      { highlight: false, accentClass: d ? 'border-white/[0.06]' : 'border-slate-200', btnClass: d ? 'border border-white/[0.1] hover:bg-white/[0.04] text-slate-300' : 'border border-slate-200 hover:bg-slate-50 text-slate-600' },
@@ -90,11 +91,18 @@ export default function Planos({ currentPlanId, onPlanUpgraded, theme = 'dark' }
           </div>
         )}
 
+        {error && (
+          <div className="max-w-2xl mx-auto bg-red-500/10 border border-red-500/30 text-red-400 text-sm rounded-xl p-3 text-center">
+            {error}
+          </div>
+        )}
+
         {/* Planos */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-start">
           {SUBSCRIPTION_PLANS.map(plan => {
             const meta = planMeta[plan.id] || planMeta.free;
             const isCurrent = plan.id === currentPlanId;
+            const isLoading = loadingPlanId === plan.id;
 
             const isPremium = meta.highlight;
             return (
@@ -106,8 +114,6 @@ export default function Planos({ currentPlanId, onPlanUpgraded, theme = 'dark' }
                     : cardBg}
                   ${meta.accentClass}`}
               >
-
-                {/* Barra superior dourada no premium */}
                 {isPremium && (
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent rounded-t-2xl" />
                 )}
@@ -119,7 +125,6 @@ export default function Planos({ currentPlanId, onPlanUpgraded, theme = 'dark' }
                 )}
 
                 <div className="space-y-4 flex-1">
-                  {/* Nome e preço */}
                   <div className={`pb-4 border-b ${isPremium ? 'border-amber-500/20' : bdr}`}>
                     <h3 className={`text-base font-black ${isPremium ? 'text-amber-400' : txt}`}>
                       {plan.name}
@@ -140,7 +145,6 @@ export default function Planos({ currentPlanId, onPlanUpgraded, theme = 'dark' }
                     )}
                   </div>
 
-                  {/* Features */}
                   <ul className="space-y-2.5">
                     {plan.features.map((feat, i) => (
                       <li key={i} className={`flex items-start gap-2 text-xs leading-relaxed ${isPremium ? 'text-slate-200' : d ? 'text-slate-300' : 'text-slate-600'}`}>
@@ -151,7 +155,6 @@ export default function Planos({ currentPlanId, onPlanUpgraded, theme = 'dark' }
                   </ul>
                 </div>
 
-                {/* CTA */}
                 <div className={`mt-6 pt-5 border-t ${isPremium ? 'border-amber-500/15' : bdr}`}>
                   {isCurrent ? (
                     <div className="w-full py-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center gap-2">
@@ -160,9 +163,14 @@ export default function Planos({ currentPlanId, onPlanUpgraded, theme = 'dark' }
                   ) : (
                     <button
                       onClick={() => handleBuy(plan)}
-                      className={`w-full py-3.5 rounded-xl text-sm font-bold transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer ${meta.btnClass}`}
+                      disabled={isLoading}
+                      className={`w-full py-3.5 rounded-xl text-sm font-bold transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed ${meta.btnClass}`}
                     >
-                      {plan.price === 0 ? 'Começar Grátis' : 'Assinar Agora'}
+                      {isLoading ? (
+                        <><Loader2 className="w-4 h-4 animate-spin" /> Redirecionando...</>
+                      ) : (
+                        plan.price === 0 ? 'Começar Grátis' : 'Assinar Agora'
+                      )}
                     </button>
                   )}
                 </div>
@@ -171,106 +179,10 @@ export default function Planos({ currentPlanId, onPlanUpgraded, theme = 'dark' }
           })}
         </div>
 
-        {/* Rodapé de segurança */}
         <p className="text-center text-[11px] text-slate-600 font-mono">
           🔒 SSL · Processamento Stripe · Cancelamento autônomo a qualquer momento
         </p>
-
       </div>
-
-      {/* Modal de Pagamento */}
-      {showModal && selectedPlan && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className={`${modalBg} max-w-md w-full rounded-2xl p-6 shadow-2xl shadow-black/40`}>
-
-            {/* Header modal */}
-            <div className={`flex items-center justify-between pb-4 border-b ${bdr} mb-5`}>
-              <div className="flex items-center gap-2">
-                <div className="px-2 py-0.5 bg-indigo-600 rounded text-white text-xs font-black">stripe</div>
-                <span className="text-xs font-mono font-bold text-slate-400">Checkout Seguro</span>
-              </div>
-              <button onClick={() => setShowModal(false)} className={`transition-colors cursor-pointer ${d ? 'text-slate-500 hover:text-white' : 'text-slate-400 hover:text-slate-900'}`}>
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            {success ? (
-              <div className="text-center py-10 space-y-4">
-                <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto">
-                  <CheckCircle className="w-8 h-8 text-emerald-400" />
-                </div>
-                <div>
-                  <h4 className={`text-lg font-black ${txt}`}>Assinatura Ativada!</h4>
-                  <p className="text-xs text-emerald-400 font-mono mt-1">Bem-vindo ao ProvaX AI Premium!</p>
-                </div>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="text-center mb-2">
-                  <p className="text-xs text-slate-500">Assinando</p>
-                  <h4 className={`text-base font-black mt-0.5 ${txt}`}>
-                    {selectedPlan.name} — R$ {selectedPlan.price.toFixed(2)}/mês
-                  </h4>
-                </div>
-
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-[10px] font-mono font-bold uppercase text-slate-500 mb-1.5">Número do Cartão</label>
-                    <div className="relative">
-                      <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                      <input
-                        type="text" required value={cardNumber}
-                        onChange={e => setCardNumber(e.target.value.replace(/\D/g, '').slice(0, 16))}
-                        placeholder="4000 1234 5678 9010"
-                        className={`w-full rounded-xl py-2.5 pl-9 pr-4 text-sm outline-none transition-all ${inp}`}
-                      />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    {[
-                      { label: 'Validade', value: cardExpiry, set: setCardExpiry, ph: 'MM/AA', max: 5, type: 'text' },
-                      { label: 'CVC', value: cardCvc, set: (v: string) => setCardCvc(v.replace(/\D/g,'').slice(0,3)), ph: '123', max: 3, type: 'password' },
-                    ].map(f => (
-                      <div key={f.label}>
-                        <label className="block text-[10px] font-mono font-bold uppercase text-slate-500 mb-1.5">{f.label}</label>
-                        <input
-                          type={f.type} required value={f.value}
-                          onChange={e => f.set(e.target.value.slice(0, f.max))}
-                          placeholder={f.ph}
-                          className={`w-full rounded-xl py-2.5 px-3 text-sm outline-none transition-all ${inp}`}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-mono font-bold uppercase text-slate-500 mb-1.5">Nome no Cartão</label>
-                    <input
-                      type="text" required value={cardName}
-                      onChange={e => setCardName(e.target.value)}
-                      placeholder="TITULAR DO CARTÃO"
-                      className={`w-full rounded-xl py-2.5 px-3 text-sm outline-none transition-all uppercase ${inp}`}
-                    />
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-2 bg-amber-500/5 border border-amber-500/15 rounded-xl p-3">
-                  <AlertCircle className="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5" />
-                  <p className="text-[10px] text-slate-500 leading-relaxed">
-                    Ambiente simulado. Não insira dados reais. Use cartões fictícios (ex: 4000 1234 5678 9010).
-                  </p>
-                </div>
-
-                <button
-                  type="submit" disabled={loading}
-                  className="w-full py-3 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white font-bold rounded-xl text-sm flex items-center justify-center gap-2 transition-all disabled:opacity-60 cursor-pointer shadow-lg shadow-indigo-500/20"
-                >
-                  {loading ? <><Loader2 className="w-4 h-4 animate-spin" /> Processando...</> : <>Pagar R$ {selectedPlan.price.toFixed(2)}</>}
-                </button>
-              </form>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

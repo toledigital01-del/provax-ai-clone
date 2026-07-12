@@ -61,6 +61,35 @@ export default function App() {
       });
   }, [user]);
 
+  // Após retorno do Stripe Checkout com ?success=true, refazer fetch do plan no Supabase
+  useEffect(() => {
+    if (typeof window === 'undefined' || !user) return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('success') !== 'true') return;
+
+    // Polling curto — webhook do Stripe pode levar 1-2s para atualizar o profile
+    let attempts = 0;
+    const maxAttempts = 8;
+    const interval = setInterval(async () => {
+      attempts++;
+      const { data } = await supabase
+        .from('profiles')
+        .select('plan')
+        .eq('id', user.id)
+        .single();
+      if (data?.plan && data.plan !== 'free') {
+        setSubscriptionPlan(data.plan as 'free' | 'essencial' | 'premium');
+        clearInterval(interval);
+        // Limpar query params
+        window.history.replaceState(null, '', window.location.pathname);
+      } else if (attempts >= maxAttempts) {
+        clearInterval(interval);
+        window.history.replaceState(null, '', window.location.pathname);
+      }
+    }, 1500);
+    return () => clearInterval(interval);
+  }, [user]);
+
   // Theme state choice: 'dark' | 'light'
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
     if (typeof localStorage === 'undefined') return 'dark';
@@ -856,6 +885,8 @@ export default function App() {
             theme={theme}
             currentPlanId={subscriptionPlan}
             onPlanUpgraded={(newPlan: 'free' | 'essencial' | 'premium') => setSubscriptionPlan(newPlan)}
+            userId={user?.id}
+            userEmail={user?.email}
           />
         );
       case 'contran':
