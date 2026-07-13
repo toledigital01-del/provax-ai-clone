@@ -47,7 +47,6 @@ export default function App() {
       .single()
       .then(({ data }) => {
         if (data?.name && !onboarding) {
-          // Usuário já tem perfil — preencher onboarding com dados do banco
           setOnboarding({
             name: data.name,
             role: 'PRF',
@@ -58,36 +57,40 @@ export default function App() {
             selectedLanguage: data.language || 'Inglês',
           });
         }
+        if (data?.plan && data.plan !== 'free') {
+          setSubscriptionPlan(data.plan as 'essencial' | 'premium');
+        }
       });
   }, [user]);
 
-  // Após retorno do Stripe Checkout com ?success=true, refazer fetch do plan no Supabase
+  // Polling após retorno do Stripe Checkout (?success=true)
   useEffect(() => {
-    if (typeof window === 'undefined' || !user) return;
+    if (!user) return;
     const params = new URLSearchParams(window.location.search);
-    if (params.get('success') !== 'true') return;
+    if (!params.get('success')) return;
 
-    // Polling curto — webhook do Stripe pode levar 1-2s para atualizar o profile
+    // Remove os params da URL sem recarregar a página
+    const cleanUrl = window.location.pathname;
+    window.history.replaceState({}, '', cleanUrl);
+
     let attempts = 0;
-    const maxAttempts = 8;
-    const interval = setInterval(async () => {
+    const MAX = 10;
+    const poll = setInterval(async () => {
       attempts++;
       const { data } = await supabase
         .from('profiles')
-        .select('plan')
+        .select('plan, subscription_status')
         .eq('id', user.id)
         .single();
-      if (data?.plan && data.plan !== 'free') {
-        setSubscriptionPlan(data.plan as 'free' | 'essencial' | 'premium');
-        clearInterval(interval);
-        // Limpar query params
-        window.history.replaceState(null, '', window.location.pathname);
-      } else if (attempts >= maxAttempts) {
-        clearInterval(interval);
-        window.history.replaceState(null, '', window.location.pathname);
+      if (data?.subscription_status === 'active' && data?.plan) {
+        setSubscriptionPlan(data.plan as 'essencial' | 'premium');
+        clearInterval(poll);
+      } else if (attempts >= MAX) {
+        clearInterval(poll);
       }
-    }, 1500);
-    return () => clearInterval(interval);
+    }, 3000);
+
+    return () => clearInterval(poll);
   }, [user]);
 
   // Theme state choice: 'dark' | 'light'

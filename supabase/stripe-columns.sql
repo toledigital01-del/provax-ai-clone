@@ -1,7 +1,7 @@
--- Stripe subscription columns for profiles
--- Executar no Supabase → SQL Editor → Run após deploy
+-- Adiciona colunas Stripe na tabela profiles
+-- Execute no Supabase → SQL Editor → Run
 
-ALTER TABLE public.profiles
-  ADD COLUMN IF NOT EXISTS stripe_customer_id text,
-  ADD COLUMN IF NOT EXISTS stripe_subscription_id text,
-  ADD COLUMN IF NOT EXISTS subscription_status text DEFAULT 'inactive';
+alter table public.profiles
+  add column if not exists stripe_customer_id     text,
+  add column if not exists stripe_subscription_id  text,
+  add column if not exists subscription_status     text default 'inactive';

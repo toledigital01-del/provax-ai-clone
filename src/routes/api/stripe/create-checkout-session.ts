@@ -1,73 +1,65 @@
 import { createFileRoute } from "@tanstack/react-router";
-import Stripe from "stripe";
 
-const PLANS: Record<string, { name: string; amount: number }> = {
-  essencial: { name: "Essencial PRF", amount: 4990 },
-  premium: { name: "Athena Supreme", amount: 9700 },
-};
+const PLANS = {
+  essencial: { name: 'Plano Essencial PRF', amount: 4990 },
+  premium:   { name: 'Athena Supreme PRF',  amount: 9700 },
+} as const;
 
 export const Route = createFileRoute("/api/stripe/create-checkout-session")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const secretKey = process.env.STRIPE_SECRET_KEY;
-        if (!secretKey) {
-          return Response.json(
-            { error: "STRIPE_SECRET_KEY não configurada no ambiente." },
-            { status: 500 },
-          );
+        const stripeKey = process.env.STRIPE_SECRET_KEY;
+        if (!stripeKey) {
+          return Response.json({ error: 'Stripe não configurado' }, { status: 500 });
         }
 
-        const body = await request.json().catch(() => ({}));
-        const planId = body.planId as "essencial" | "premium";
-        const userId = body.userId as string | undefined;
-        const userEmail = body.userEmail as string | undefined;
+        const body = await request.json().catch(() => ({})) as any;
+        const { planId, userId, userEmail } = body as {
+          planId: string;
+          userId: string;
+          userEmail: string;
+        };
 
-        const plan = PLANS[planId];
+        const plan = PLANS[planId as keyof typeof PLANS];
         if (!plan) {
-          return Response.json({ error: "Plano inválido." }, { status: 400 });
-        }
-        if (!userId || !userEmail) {
-          return Response.json(
-            { error: "userId e userEmail são obrigatórios." },
-            { status: 400 },
-          );
+          return Response.json({ error: 'Plano inválido' }, { status: 400 });
         }
 
-        const origin =
-          request.headers.get("origin") ||
-          `https://${request.headers.get("host") || "provaxai.com.br"}`;
+        const origin = request.headers.get('origin') || 'https://provaxai.com.br';
 
-        const stripe = new Stripe(secretKey);
+        const params = new URLSearchParams();
+        params.set('mode', 'subscription');
+        params.set('customer_email', userEmail || '');
+        params.set('client_reference_id', userId || '');
+        params.set('line_items[0][price_data][currency]', 'brl');
+        params.set('line_items[0][price_data][product_data][name]', plan.name);
+        params.set('line_items[0][price_data][unit_amount]', plan.amount.toString());
+        params.set('line_items[0][price_data][recurring][interval]', 'month');
+        params.set('line_items[0][quantity]', '1');
+        params.set('metadata[planId]', planId);
+        params.set('metadata[userId]', userId || '');
+        params.set('subscription_data[metadata][planId]', planId);
+        params.set('subscription_data[metadata][userId]', userId || '');
+        params.set('success_url', `${origin}/?success=true&plan=${planId}`);
+        params.set('cancel_url', `${origin}/?canceled=true`);
 
-        try {
-          const session = await stripe.checkout.sessions.create({
-            mode: "subscription",
-            customer_email: userEmail,
-            line_items: [
-              {
-                price_data: {
-                  currency: "brl",
-                  product_data: { name: plan.name },
-                  unit_amount: plan.amount,
-                  recurring: { interval: "month" },
-                },
-                quantity: 1,
-              },
-            ],
-            success_url: `${origin}/planos?success=true`,
-            cancel_url: `${origin}/planos?canceled=true`,
-            metadata: { userId, planId },
-          });
+        const res = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${stripeKey}`,
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: params.toString(),
+        });
 
-          return Response.json({ url: session.url });
-        } catch (err: any) {
-          console.error("[stripe] create-checkout-session failed:", err);
-          return Response.json(
-            { error: err?.message || "Falha ao criar sessão do Stripe." },
-            { status: 500 },
-          );
+        const session = await res.json() as any;
+        if (!res.ok) {
+          console.error('[stripe/create-checkout-session]', session?.error?.message);
+          return Response.json({ error: session?.error?.message || 'Erro Stripe' }, { status: 500 });
         }
+
+        return Response.json({ url: session.url });
       },
     },
   },

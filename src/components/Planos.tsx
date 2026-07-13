@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SUBSCRIPTION_PLANS } from '../data/mockData';
-import { ShieldCheck, Sparkles, Gift, Loader2 } from 'lucide-react';
+import { ShieldCheck, Sparkles, AlertCircle, Loader2, Gift } from 'lucide-react';
 
 interface PlanosProps {
   currentPlanId: 'free' | 'essencial' | 'premium';
@@ -13,35 +13,26 @@ interface PlanosProps {
 export default function Planos({ currentPlanId, onPlanUpgraded, theme = 'dark', userId, userEmail }: PlanosProps) {
   const d = theme === 'dark';
   const [loadingPlanId, setLoadingPlanId] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState('');
 
   const handleBuy = async (plan: any) => {
-    setError(null);
-
     if (plan.price === 0) {
-      onPlanUpgraded(plan.id);
+      onPlanUpgraded('free');
       return;
     }
-
-    if (!userId || !userEmail) {
-      setError('Você precisa estar logado para assinar um plano.');
-      return;
-    }
-
     setLoadingPlanId(plan.id);
+    setError('');
     try {
       const res = await fetch('/api/stripe/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ planId: plan.id, userId, userEmail }),
+        body: JSON.stringify({ planId: plan.id, userId: userId || '', userEmail: userEmail || '' }),
       });
-      const data = await res.json();
-      if (!res.ok || !data?.url) {
-        throw new Error(data?.error || 'Falha ao iniciar checkout.');
-      }
+      const data = await res.json() as any;
+      if (!res.ok || !data.url) throw new Error(data.error || 'Erro ao criar sessão Stripe');
       window.location.href = data.url;
     } catch (err: any) {
-      setError(err?.message || 'Erro inesperado ao processar pagamento.');
+      setError(err.message || 'Erro ao redirecionar para o pagamento');
       setLoadingPlanId(null);
     }
   };
@@ -91,18 +82,11 @@ export default function Planos({ currentPlanId, onPlanUpgraded, theme = 'dark', 
           </div>
         )}
 
-        {error && (
-          <div className="max-w-2xl mx-auto bg-red-500/10 border border-red-500/30 text-red-400 text-sm rounded-xl p-3 text-center">
-            {error}
-          </div>
-        )}
-
         {/* Planos */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-start">
           {SUBSCRIPTION_PLANS.map(plan => {
             const meta = planMeta[plan.id] || planMeta.free;
             const isCurrent = plan.id === currentPlanId;
-            const isLoading = loadingPlanId === plan.id;
 
             const isPremium = meta.highlight;
             return (
@@ -114,6 +98,8 @@ export default function Planos({ currentPlanId, onPlanUpgraded, theme = 'dark', 
                     : cardBg}
                   ${meta.accentClass}`}
               >
+
+                {/* Barra superior dourada no premium */}
                 {isPremium && (
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent rounded-t-2xl" />
                 )}
@@ -125,6 +111,7 @@ export default function Planos({ currentPlanId, onPlanUpgraded, theme = 'dark', 
                 )}
 
                 <div className="space-y-4 flex-1">
+                  {/* Nome e preço */}
                   <div className={`pb-4 border-b ${isPremium ? 'border-amber-500/20' : bdr}`}>
                     <h3 className={`text-base font-black ${isPremium ? 'text-amber-400' : txt}`}>
                       {plan.name}
@@ -145,6 +132,7 @@ export default function Planos({ currentPlanId, onPlanUpgraded, theme = 'dark', 
                     )}
                   </div>
 
+                  {/* Features */}
                   <ul className="space-y-2.5">
                     {plan.features.map((feat, i) => (
                       <li key={i} className={`flex items-start gap-2 text-xs leading-relaxed ${isPremium ? 'text-slate-200' : d ? 'text-slate-300' : 'text-slate-600'}`}>
@@ -155,6 +143,7 @@ export default function Planos({ currentPlanId, onPlanUpgraded, theme = 'dark', 
                   </ul>
                 </div>
 
+                {/* CTA */}
                 <div className={`mt-6 pt-5 border-t ${isPremium ? 'border-amber-500/15' : bdr}`}>
                   {isCurrent ? (
                     <div className="w-full py-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold flex items-center justify-center gap-2">
@@ -163,14 +152,13 @@ export default function Planos({ currentPlanId, onPlanUpgraded, theme = 'dark', 
                   ) : (
                     <button
                       onClick={() => handleBuy(plan)}
-                      disabled={isLoading}
-                      className={`w-full py-3.5 rounded-xl text-sm font-bold transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed ${meta.btnClass}`}
+                      disabled={!!loadingPlanId}
+                      className={`w-full py-3.5 rounded-xl text-sm font-bold transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer disabled:opacity-60 disabled:cursor-wait flex items-center justify-center gap-2 ${meta.btnClass}`}
                     >
-                      {isLoading ? (
-                        <><Loader2 className="w-4 h-4 animate-spin" /> Redirecionando...</>
-                      ) : (
-                        plan.price === 0 ? 'Começar Grátis' : 'Assinar Agora'
-                      )}
+                      {loadingPlanId === plan.id
+                        ? <><Loader2 className="w-4 h-4 animate-spin" /> Redirecionando...</>
+                        : plan.price === 0 ? 'Começar Grátis' : 'Assinar Agora'
+                      }
                     </button>
                   )}
                 </div>
@@ -179,9 +167,19 @@ export default function Planos({ currentPlanId, onPlanUpgraded, theme = 'dark', 
           })}
         </div>
 
+        {/* Banner de erro */}
+        {error && (
+          <div className="flex items-center gap-3 bg-red-500/10 border border-red-500/20 rounded-2xl p-4 max-w-2xl mx-auto">
+            <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+            <p className="text-xs text-red-400">{error}</p>
+          </div>
+        )}
+
+        {/* Rodapé de segurança */}
         <p className="text-center text-[11px] text-slate-600 font-mono">
           🔒 SSL · Processamento Stripe · Cancelamento autônomo a qualquer momento
         </p>
+
       </div>
     </div>
   );

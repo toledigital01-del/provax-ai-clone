@@ -10,14 +10,14 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiStripeWebhookRouteImport } from './routes/api/stripe/webhook'
+import { Route as ApiStripeCreateCheckoutSessionRouteImport } from './routes/api/stripe/create-checkout-session'
 import { Route as ApiGenerateScheduleRouteImport } from './routes/api/generate-schedule'
 import { Route as ApiGenerateQuestionRouteImport } from './routes/api/generate-question'
 import { Route as ApiFetchDriveFolderRouteImport } from './routes/api/fetch-drive-folder'
 import { Route as ApiFetchDriveRouteImport } from './routes/api/fetch-drive'
 import { Route as ApiChatAthenaRouteImport } from './routes/api/chat-athena'
 import { Route as ApiAnalyzeLibraryRouteImport } from './routes/api/analyze-library'
-import { Route as ApiStripeWebhookRouteImport } from './routes/api/stripe/webhook'
-import { Route as ApiStripeCreateCheckoutSessionRouteImport } from './routes/api/stripe/create-checkout-session'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -54,17 +54,16 @@ const ApiAnalyzeLibraryRoute = ApiAnalyzeLibraryRouteImport.update({
   path: '/api/analyze-library',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiStripeCreateCheckoutSessionRoute = ApiStripeCreateCheckoutSessionRouteImport.update({
+  id: '/api/stripe/create-checkout-session',
+  path: '/api/stripe/create-checkout-session',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiStripeWebhookRoute = ApiStripeWebhookRouteImport.update({
   id: '/api/stripe/webhook',
   path: '/api/stripe/webhook',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiStripeCreateCheckoutSessionRoute =
-  ApiStripeCreateCheckoutSessionRouteImport.update({
-    id: '/api/stripe/create-checkout-session',
-    path: '/api/stripe/create-checkout-session',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -199,18 +198,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAnalyzeLibraryRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/stripe/webhook': {
-      id: '/api/stripe/webhook'
-      path: '/api/stripe/webhook'
-      fullPath: '/api/stripe/webhook'
-      preLoaderRoute: typeof ApiStripeWebhookRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/api/stripe/create-checkout-session': {
       id: '/api/stripe/create-checkout-session'
       path: '/api/stripe/create-checkout-session'
       fullPath: '/api/stripe/create-checkout-session'
       preLoaderRoute: typeof ApiStripeCreateCheckoutSessionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/stripe/webhook': {
+      id: '/api/stripe/webhook'
+      path: '/api/stripe/webhook'
+      fullPath: '/api/stripe/webhook'
+      preLoaderRoute: typeof ApiStripeWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
   }

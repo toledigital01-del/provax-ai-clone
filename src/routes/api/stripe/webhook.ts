@@ -1,103 +1,107 @@
 import { createFileRoute } from "@tanstack/react-router";
-import Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
+
+const SUPABASE_URL = 'https://fkwivsebcbuxvobcpina.supabase.co';
+
+async function verifyStripeSignature(rawBody: string, sigHeader: string, secret: string): Promise<boolean> {
+  const pairs = Object.fromEntries(sigHeader.split(',').map(p => { const i = p.indexOf('='); return [p.slice(0, i), p.slice(i + 1)]; }));
+  const timestamp = pairs['t'];
+  const sig = pairs['v1'];
+  if (!timestamp || !sig) return false;
+
+  // Rejeita payloads com mais de 5 minutos
+  if (Math.abs(Math.floor(Date.now() / 1000) - parseInt(timestamp)) > 300) return false;
+
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    'raw',
+    encoder.encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+
+  const buf = await crypto.subtle.sign('HMAC', key, encoder.encode(`${timestamp}.${rawBody}`));
+  const expected = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+
+  if (expected.length !== sig.length) return false;
+  let diff = 0;
+  for (let i = 0; i < expected.length; i++) diff |= expected.charCodeAt(i) ^ sig.charCodeAt(i);
+  return diff === 0;
+}
 
 export const Route = createFileRoute("/api/stripe/webhook")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const secretKey = process.env.STRIPE_SECRET_KEY;
         const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-        const supabaseUrl =
-          process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
         const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-        if (!secretKey || !webhookSecret) {
-          return new Response("Stripe env não configurado.", { status: 500 });
-        }
-        if (!supabaseUrl || !serviceRoleKey) {
-          return new Response("Supabase service role não configurado.", {
-            status: 500,
-          });
-        }
-
-        const signature = request.headers.get("stripe-signature");
-        if (!signature) {
-          return new Response("Assinatura ausente.", { status: 400 });
+        if (!webhookSecret || !serviceRoleKey) {
+          console.error('[stripe/webhook] variáveis de ambiente ausentes');
+          return Response.json({ error: 'Webhook não configurado' }, { status: 500 });
         }
 
         const rawBody = await request.text();
-        const stripe = new Stripe(secretKey);
+        const sig = request.headers.get('stripe-signature') || '';
 
-        let event: Stripe.Event;
-        try {
-          event = stripe.webhooks.constructEvent(
-            rawBody,
-            signature,
-            webhookSecret,
-          );
-        } catch (err: any) {
-          console.error("[stripe webhook] invalid signature:", err?.message);
-          return new Response(`Webhook Error: ${err?.message}`, { status: 400 });
+        const valid = await verifyStripeSignature(rawBody, sig, webhookSecret);
+        if (!valid) {
+          console.error('[stripe/webhook] assinatura inválida');
+          return Response.json({ error: 'Assinatura inválida' }, { status: 400 });
         }
 
-        const supabase = createClient(supabaseUrl, serviceRoleKey, {
-          auth: { persistSession: false, autoRefreshToken: false },
+        const event = JSON.parse(rawBody) as { type: string; data: { object: any } };
+
+        const supabaseAdmin = createClient(SUPABASE_URL, serviceRoleKey, {
+          auth: { autoRefreshToken: false, persistSession: false },
         });
 
-        try {
-          switch (event.type) {
-            case "checkout.session.completed": {
-              const session = event.data.object as Stripe.Checkout.Session;
-              const userId = session.metadata?.userId;
-              const planId = session.metadata?.planId;
-              if (userId && planId) {
-                await supabase
-                  .from("profiles")
-                  .update({
-                    plan: planId,
-                    stripe_customer_id: session.customer as string | null,
-                    stripe_subscription_id: session.subscription as
-                      | string
-                      | null,
-                    subscription_status: "active",
-                  })
-                  .eq("id", userId);
-              }
-              break;
-            }
-            case "customer.subscription.updated":
-            case "customer.subscription.deleted": {
-              const sub = event.data.object as Stripe.Subscription;
-              const inactiveStatuses = [
-                "canceled",
-                "unpaid",
-                "past_due",
-                "incomplete_expired",
-                "paused",
-              ];
-              if (inactiveStatuses.includes(sub.status)) {
-                await supabase
-                  .from("profiles")
-                  .update({
-                    plan: "free",
-                    subscription_status: sub.status,
-                  })
-                  .eq("stripe_customer_id", sub.customer as string);
-              } else {
-                await supabase
-                  .from("profiles")
-                  .update({ subscription_status: sub.status })
-                  .eq("stripe_customer_id", sub.customer as string);
-              }
-              break;
-            }
-            default:
-              break;
+        const customerId = (obj: any): string | null => {
+          const c = obj?.customer;
+          return typeof c === 'string' ? c : (c?.id ?? null);
+        };
+
+        if (event.type === 'checkout.session.completed') {
+          const session = event.data.object;
+          const userId = session.client_reference_id || session.metadata?.userId;
+          const planId  = session.metadata?.planId;
+          const custId  = customerId(session);
+          const subId   = typeof session.subscription === 'string' ? session.subscription : session.subscription?.id;
+
+          if (userId && planId) {
+            const { error } = await supabaseAdmin.from('profiles').update({
+              plan: planId,
+              stripe_customer_id: custId,
+              stripe_subscription_id: subId,
+              subscription_status: 'active',
+            }).eq('id', userId);
+            if (error) console.error('[stripe/webhook] update profiles:', error.message);
           }
-        } catch (err: any) {
-          console.error("[stripe webhook] handler failed:", err);
-          return new Response(`Handler error: ${err?.message}`, { status: 500 });
+        }
+
+        if (event.type === 'customer.subscription.updated') {
+          const sub = event.data.object;
+          const cid = customerId(sub);
+          const status = sub.status as string;
+          if (cid && ['canceled', 'unpaid', 'past_due'].includes(status)) {
+            await supabaseAdmin.from('profiles').update({
+              plan: 'free',
+              subscription_status: status,
+            }).eq('stripe_customer_id', cid);
+          }
+        }
+
+        if (event.type === 'customer.subscription.deleted') {
+          const sub = event.data.object;
+          const cid = customerId(sub);
+          if (cid) {
+            await supabaseAdmin.from('profiles').update({
+              plan: 'free',
+              stripe_subscription_id: null,
+              subscription_status: 'canceled',
+            }).eq('stripe_customer_id', cid);
+          }
         }
 
         return Response.json({ received: true });
