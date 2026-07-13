@@ -421,8 +421,7 @@ export default function Cronograma({ schedule, onboardingData, onUpdateSchedule,
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
         <div>
-          <p className={`text-[11px] font-mono font-bold uppercase tracking-widest ${fnt}`}>Metodologia Adaptativa Athena</p>
-          <h1 className={`text-2xl font-black tracking-tight mt-1 ${txt}`}>Cronograma</h1>
+          <h1 className={`text-2xl font-black tracking-tight ${txt}`}>Cronograma</h1>
           <p className={`text-sm mt-0.5 ${mut}`}>
             Plano adaptativo para {onboardingData?.role === 'PRF' ? 'Policial Rodoviário Federal (PRF)' : (onboardingData?.role || 'PRF')}.
           </p>

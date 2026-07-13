@@ -118,8 +118,7 @@ export default function Biblioteca({ library, onAddLibraryItem, onQuestionAnswer
         {/* Header */}
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div>
-            <p className={`text-[11px] font-mono font-bold uppercase tracking-widest ${fnt}`}>Biblioteca IA</p>
-            <h1 className={`text-2xl font-black tracking-tight mt-1 ${txt}`}>Seus Materiais</h1>
+            <h1 className={`text-2xl font-black tracking-tight ${txt}`}>Seus Materiais</h1>
             <p className={`text-sm mt-0.5 ${mut}`}>Suba PDFs ou anotações e receba questões geradas pela Athena.</p>
           </div>
           <button onClick={() => setActiveTab('add')}

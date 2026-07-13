@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { UserOnboarding } from '../types';
 import Logo from './Logo';
-import { Calendar, Clock, User, ArrowRight, ArrowLeft, Loader2, Sparkles, Check } from 'lucide-react';
+import { Calendar, Clock, User, ArrowRight, ArrowLeft, Loader2, Sparkles, Check, RefreshCw } from 'lucide-react';
 
 interface OnboardingProps {
   onComplete: (data: UserOnboarding, generatedSchedule: any) => void;
@@ -33,6 +33,7 @@ export default function Onboarding({ onComplete, theme = 'dark' }: OnboardingPro
   const [difficulties, setDifficulties] = useState<string[]>([]);
   const [hasDoneExam, setHasDoneExam] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [scheduleError, setScheduleError] = useState(false);
 
   const toggle = (sub: string) =>
     setDifficulties(prev => prev.includes(sub) ? prev.filter(d => d !== sub) : [...prev, sub]);
@@ -42,12 +43,13 @@ export default function Onboarding({ onComplete, theme = 'dark' }: OnboardingPro
 
   const handleSubmit = async () => {
     setLoading(true);
+    setScheduleError(false);
     const data: UserOnboarding = { name, role: 'PRF', hoursPerDay, testDate, difficulties, hasDoneExam, selectedLanguage };
     try {
       const res = await fetch('/api/generate-schedule', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ onboarding: data }) });
       onComplete(data, await res.json());
     } catch {
-      onComplete(data, null);
+      setScheduleError(true);
     } finally {
       setLoading(false);
     }
@@ -64,12 +66,12 @@ export default function Onboarding({ onComplete, theme = 'dark' }: OnboardingPro
       <div className="w-full max-w-lg relative">
 
         {/* Card */}
-        <div className="bg-[#0d1117] border border-white/[0.08] rounded-3xl p-7 shadow-2xl shadow-black/60">
+        <div className="bg-[#0d1117] border border-white/[0.08] rounded-2xl p-7 shadow-2xl shadow-black/60">
 
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <Logo variant="compact" theme="dark" />
-            <span className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-widest">
+            <span className="text-xs text-slate-500 font-mono">
               {step}/{TOTAL_STEPS}
             </span>
           </div>
@@ -101,7 +103,7 @@ export default function Onboarding({ onComplete, theme = 'dark' }: OnboardingPro
                   <p className="text-sm text-slate-400 mt-1">Vamos personalizar sua experiência de estudos.</p>
                 </div>
                 <div>
-                  <label className="block text-[10px] font-mono font-bold uppercase tracking-widest text-slate-500 mb-1.5">Nome / Apelido</label>
+                  <label className="block text-xs font-semibold text-slate-400 mb-1.5">Nome / Apelido</label>
                   <div className="relative">
                     <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                     <input
@@ -131,7 +133,7 @@ export default function Onboarding({ onComplete, theme = 'dark' }: OnboardingPro
                   <div className="ml-auto w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-mono font-bold uppercase tracking-widest text-slate-500 mb-2">Língua Estrangeira da Prova</label>
+                  <label className="block text-xs font-semibold text-slate-400 mb-2">Língua Estrangeira da Prova</label>
                   <div className="grid grid-cols-2 gap-3">
                     {(['Inglês', 'Espanhol'] as const).map(lang => (
                       <button
@@ -173,7 +175,7 @@ export default function Onboarding({ onComplete, theme = 'dark' }: OnboardingPro
                   </div>
                 </div>
                 <div>
-                  <label className="block text-[10px] font-mono font-bold uppercase tracking-widest text-slate-500 mb-1.5 flex items-center gap-1.5">
+                  <label className="block text-xs font-semibold text-slate-400 mb-1.5 flex items-center gap-1.5">
                     <Calendar className="w-3.5 h-3.5" /> Data Prevista do Edital
                   </label>
                   <input
@@ -250,6 +252,21 @@ export default function Onboarding({ onComplete, theme = 'dark' }: OnboardingPro
                     Ao finalizar, a Athena calibrará sua probabilidade inicial de aprovação e criará seu cronograma adaptativo semanal.
                   </p>
                 </div>
+              </div>
+            )}
+
+            {/* Erro de geração de cronograma */}
+            {scheduleError && (
+              <div className="bg-red-950/20 border border-red-500/20 rounded-xl p-3.5 mt-4">
+                <p className="text-xs text-red-400 leading-relaxed text-center mb-2">
+                  Não consegui gerar seu cronograma. Verifique sua conexão e tente novamente.
+                </p>
+                <button
+                  onClick={handleSubmit}
+                  className="flex items-center gap-1.5 text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition-colors mx-auto"
+                >
+                  <RefreshCw className="w-3 h-3" /> Tentar novamente
+                </button>
               </div>
             )}
 

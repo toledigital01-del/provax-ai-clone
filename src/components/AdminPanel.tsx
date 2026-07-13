@@ -2081,7 +2081,7 @@ export default function AdminPanel({ onBack, theme, toggleTheme }: AdminPanelPro
               {/* Top PDF proof importer */}
               <div className="bg-[#0f1524] border border-dashed border-indigo-500/30 rounded-2xl p-6 text-center space-y-3 relative overflow-hidden shadow-sm" id="pdf-uploader-strip-zone">
                 <div className="mx-auto w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/25 flex items-center justify-center text-indigo-400 font-bold">
-                  <Upload className="w-6 h-6 animate-bounce text-indigo-400" style={{ animationDuration: '3s' }} />
+                  <Upload className="w-6 h-6 animate-pulse text-indigo-400" />
                 </div>
                 <div className="space-y-1">
                   <h3 className="text-sm font-black text-white uppercase tracking-wider">Importação Automatizada de Provas Estilo PDF</h3>
@@ -4099,7 +4099,7 @@ export default function AdminPanel({ onBack, theme, toggleTheme }: AdminPanelPro
               {materialType === 'upload' && (
                 <div onClick={() => alert('Arquivo de demonstração selecionado com sucesso!')} className="border border-dashed border-indigo-500/30 hover:border-[#182030] bg-[#070a13] p-8 rounded-xl text-center space-y-2 cursor-pointer transition-colors shadow-inner">
                   <div className="mx-auto w-10 h-10 bg-[#0f1524] border border-[#182030] rounded-lg flex items-center justify-center text-indigo-400">
-                    <Upload className="w-5 h-5 animate-bounce" style={{ animationDuration: '4s' }} />
+                    <Upload className="w-5 h-5 animate-pulse text-indigo-400" />
                   </div>
                   <div>
                     <span className="text-xs font-bold text-slate-300 block">Arraste seu arquivo .PDF, .TXT ou .DOCX</span>

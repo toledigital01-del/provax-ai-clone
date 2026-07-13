@@ -14,6 +14,7 @@ interface AthenaProps {
 export default function Athena({ onboarding, progress, messages, onSendMessage, onClearHistory, theme = 'dark' }: AthenaProps) {
   const [inputText, setInputText] = useState('');
   const [loading, setLoading] = useState(false);
+  const [lastFailedText, setLastFailedText] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const d = theme === 'dark';
 
@@ -33,8 +34,11 @@ export default function Athena({ onboarding, progress, messages, onSendMessage, 
   const handleSend = async (textToSend: string) => {
     if (!textToSend.trim() || loading) return;
     setInputText('');
+    setLastFailedText(null);
     setLoading(true);
-    try { await onSendMessage(textToSend); } catch (e) { console.error(e); } finally { setLoading(false); }
+    try { await onSendMessage(textToSend); }
+    catch (e) { console.error(e); setLastFailedText(textToSend); }
+    finally { setLoading(false); }
   };
 
   const initials = onboarding?.name?.slice(0, 1).toUpperCase() || 'R';
@@ -149,6 +153,23 @@ export default function Athena({ onboarding, progress, messages, onSendMessage, 
             <div className={`px-4 py-3 ${athenaMsgCls} rounded-2xl flex items-center gap-2`}>
               <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-500" />
               <span className={`text-xs font-mono ${mut}`}>Consultando o CTB...</span>
+            </div>
+          </div>
+        )}
+
+        {lastFailedText && !loading && (
+          <div className="flex gap-3 mr-auto max-w-[88%]">
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-emerald-600 to-teal-700 flex items-center justify-center text-sm shrink-0 mt-0.5">🦉</div>
+            <div className="space-y-2">
+              <div className={`px-4 py-3 rounded-2xl text-sm leading-relaxed ${athenaMsgCls}`}>
+                <p className="text-red-400">Tive um problema de conexão. Tente novamente.</p>
+              </div>
+              <button
+                onClick={() => handleSend(lastFailedText)}
+                className={`text-xs font-semibold flex items-center gap-1.5 transition-colors text-indigo-400 hover:text-indigo-300`}
+              >
+                <RefreshCw className="w-3 h-3" /> Tentar novamente
+              </button>
             </div>
           </div>
         )}

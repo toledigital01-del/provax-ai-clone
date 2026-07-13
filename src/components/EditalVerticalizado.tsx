@@ -205,7 +205,7 @@ export default function EditalVerticalizado({
                   <span style={{ marginLeft: 'auto', fontSize: 12, fontWeight: 800, color: p.color, fontFamily: 'monospace' }}>{pct}%</span>
                 </div>
                 <div style={{ height: 4, background: isDark ? '#1F2D45' : '#E2E8F0', borderRadius: 999, overflow: 'hidden' }}>
-                  <div style={{ height: '100%', width: `${pct}%`, background: p.color, borderRadius: 999, transition: 'width 0.5s ease' }} />
+                  <div style={{ height: '100%', width: '100%', background: p.color, borderRadius: 999, transform: `scaleX(${pct / 100})`, transformOrigin: 'left', transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)' }} />
                 </div>
               </div>
             );
@@ -362,7 +362,7 @@ export default function EditalVerticalizado({
                     {/* coverage bar + % */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0, minWidth: 100 }}>
                       <div style={{ flex: 1, height: 4, background: isDark ? '#1F2D45' : '#E2E8F0', borderRadius: 999, overflow: 'hidden', minWidth: 56 }}>
-                        <div style={{ height: '100%', width: `${pctSub}%`, background: allDone ? '#10B981' : accent, borderRadius: 999, transition: 'width 0.4s' }} />
+                        <div style={{ height: '100%', width: '100%', background: allDone ? '#10B981' : accent, borderRadius: 999, transform: `scaleX(${pctSub / 100})`, transformOrigin: 'left', transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)' }} />
                       </div>
                       <span style={{ fontSize: 11, fontWeight: 700, color: allDone ? '#10B981' : accent, fontFamily: 'monospace', width: 34, textAlign: 'right' }}>{pctSub}%</span>
                     </div>

@@ -80,8 +80,7 @@ export default function Progresso({ progress, theme = 'dark' }: ProgressoProps) 
 
         {/* Header */}
         <div>
-          <p className={`text-[11px] font-mono font-bold uppercase tracking-widest ${faint}`}>Meu Progresso</p>
-          <h1 className="text-2xl font-black tracking-tight mt-1">Análise de Desempenho</h1>
+          <h1 className="text-2xl font-black tracking-tight">Análise de Desempenho</h1>
           <p className={`text-sm mt-0.5 ${muted}`}>{progress.totalQuestionsAnswered} questões respondidas no total</p>
         </div>
 

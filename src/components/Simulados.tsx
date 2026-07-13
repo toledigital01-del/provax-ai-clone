@@ -210,8 +210,7 @@ export default function Simulados({ onSimuladoFinished, onNavigate, theme = 'dar
           <>
             {/* Header */}
             <div>
-              <p className={`text-[11px] font-mono font-bold uppercase tracking-widest ${fnt}`}>Central de Provas</p>
-              <h1 className={`text-2xl font-black tracking-tight mt-1 ${txt}`}>Simulados Padrão CEBRASPE</h1>
+              <h1 className={`text-2xl font-black tracking-tight ${txt}`}>Simulados Padrão CEBRASPE</h1>
               <p className={`text-sm mt-1 ${mut}`}>
                 Uma resposta incorreta anula uma correta. Desenvolva a estratégia de deixar em branco quando não tiver convicção.
               </p>
@@ -517,7 +516,7 @@ export default function Simulados({ onSimuladoFinished, onNavigate, theme = 'dar
             {/* Header resultado */}
             <div className="text-center py-6 space-y-3">
               <div className="w-16 h-16 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
-                <Trophy className="w-8 h-8 text-amber-400 animate-bounce" />
+                <Trophy className="w-8 h-8 text-amber-400 animate-pulse" />
               </div>
               <h2 className={`text-2xl font-black tracking-tight ${txt}`}>Simulado Concluído!</h2>
               <p className={`text-sm ${mut}`}>Resultado consolidado no seu histórico de desempenho.</p>

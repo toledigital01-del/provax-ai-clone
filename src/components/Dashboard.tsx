@@ -143,10 +143,7 @@ export default function Dashboard({
         {/* ── 1. HEADER ──────────────────────────────────────── */}
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div>
-            <p className={`text-[11px] font-mono font-bold uppercase tracking-widest ${faint}`}>
-              Painel de Operações
-            </p>
-            <h1 className="text-2xl font-black tracking-tight mt-1">
+            <h1 className="text-2xl font-black tracking-tight">
               Foco na Meta,{' '}
               <span className="text-indigo-400">{onboardingName || 'Recruta'}</span>
             </h1>
@@ -157,23 +154,20 @@ export default function Dashboard({
 
           {/* Contador de dias */}
           <div className={`${card} px-5 py-3 text-center shrink-0`}>
-            <p className={`text-[10px] font-mono font-bold uppercase tracking-widest ${faint}`}>Prova em</p>
+            <p className={`text-xs ${faint}`}>Prova em</p>
             <p className="text-3xl font-black text-white leading-none mt-1">{getDaysRemaining()}</p>
             <p className={`text-[11px] ${muted} mt-0.5`}>dias</p>
           </div>
         </div>
 
         {/* ── 2. MISSÃO DO DIA ───────────────────────────────── */}
-        <div className={`${card} p-5 relative overflow-hidden`}>
-          {/* Glow de fundo */}
-          <div className="absolute -top-10 -right-10 w-40 h-40 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
-
+        <div className={`${card} p-5`}>
           {/* Header da missão */}
           <div className="flex items-start justify-between gap-3 mb-4 relative">
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <span className={`w-1.5 h-1.5 rounded-full ${missionDone ? 'bg-emerald-400' : 'bg-indigo-400'} animate-pulse`} />
-                <span className={`text-[10px] font-mono font-bold uppercase tracking-widest ${missionDone ? 'text-emerald-400' : 'text-indigo-400'}`}>
+                <span className={`text-xs font-semibold ${missionDone ? 'text-emerald-400' : 'text-indigo-400'}`}>
                   {missionDone ? 'Missão concluída!' : `Missão de hoje · ${todayName}`}
                 </span>
               </div>
@@ -275,17 +269,15 @@ export default function Dashboard({
         </div>
 
         {/* ── 3. PROBABILIDADE + STATS ───────────────────────── */}
-        <div className={`${card} p-5 relative overflow-hidden`}>
-          <div className="absolute -bottom-8 -left-8 w-36 h-36 bg-indigo-600/8 rounded-full blur-3xl pointer-events-none" />
-
+        <div className={`${card} p-5`}>
           {/* Prob de aprovação */}
-          <div className="flex items-start justify-between gap-4 mb-4 relative">
+          <div className="flex items-start justify-between gap-4 mb-4">
             <div>
-              <p className={`text-[10px] font-mono font-bold uppercase tracking-widest ${approvalProb >= CUT_SCORE ? 'text-emerald-400' : 'text-indigo-400'}`}>
+              <p className={`text-xs font-semibold ${approvalProb >= CUT_SCORE ? 'text-emerald-400' : 'text-indigo-400'}`}>
                 Probabilidade de Aprovação PRF
               </p>
               <div className="flex items-baseline gap-2 mt-1">
-                <span className={`text-4xl font-black leading-none ${approvalProb >= CUT_SCORE ? 'text-emerald-400' : 'text-indigo-400'}`}>
+                <span className={`text-3xl font-black leading-none ${approvalProb >= CUT_SCORE ? 'text-emerald-400' : 'text-indigo-400'}`}>
                   {approvalProb.toFixed(1)}%
                 </span>
                 <span className={`text-xs ${muted}`}>
@@ -322,7 +314,7 @@ export default function Dashboard({
               <div key={s.label} className={`${cardRaised} rounded-xl p-3`}>
                 <div className={`flex items-center gap-1.5 mb-1.5 ${s.color}`}>
                   {s.icon}
-                  <span className={`text-[9px] font-mono font-bold uppercase tracking-wider ${faint}`}>{s.label}</span>
+                  <span className={`text-[10px] font-medium ${faint}`}>{s.label}</span>
                 </div>
                 <div className={`text-xl font-black ${s.color}`}>{s.value}</div>
                 <div className={`text-[10px] mt-0.5 ${faint}`}>{s.sub}</div>
@@ -393,8 +385,8 @@ export default function Dashboard({
             <Sparkles className="w-4 h-4 text-indigo-400" />
           </div>
           <div>
-            <p className="text-[10px] font-mono font-bold uppercase tracking-widest text-indigo-400 mb-1">
-              Recomendação Athena IA
+            <p className="text-xs font-semibold text-indigo-400 mb-1">
+              Recomendação da Athena
             </p>
             <p className={`text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
               {athenaText}

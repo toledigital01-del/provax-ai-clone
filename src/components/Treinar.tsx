@@ -481,8 +481,7 @@ export default function Treinar({ selectedTaskToTrain, onQuestionAnswered, onFoc
 
       {/* Header */}
       <div>
-        <p className={`text-[11px] font-mono font-bold uppercase tracking-widest ${fnt}`}>Central de Treinamento</p>
-        <h1 className={`text-2xl font-black tracking-tight mt-1 ${txt}`}>Treinar</h1>
+        <h1 className={`text-2xl font-black tracking-tight ${txt}`}>Treinar</h1>
       </div>
 
       {/* Tabs */}
@@ -1530,7 +1529,7 @@ export default function Treinar({ selectedTaskToTrain, onQuestionAnswered, onFoc
               </div>
 
               {cycleCompleted && (
-                <div className="text-emerald-400 text-xs font-bold font-mono text-center flex items-center gap-1.5 animate-bounce">
+                <div className="text-emerald-400 text-xs font-bold font-mono text-center flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Parabéns! Ciclo de estudos concluído! +0.8% adicionado.
                 </div>
               )}

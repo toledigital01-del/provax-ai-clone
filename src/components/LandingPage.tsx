@@ -247,7 +247,7 @@ export default function LandingPage({ onStartOnboarding, onLoginDirectly }: Land
 
               {/* Core Heavy Title */}
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-sans font-black tracking-tight text-white leading-[1.1]">
-                A primeira IA estratégica criada para acelerar sua <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-amber-400 to-amber-500">aprovação</span> na PRF.
+                A primeira IA estratégica criada para acelerar sua <span className="text-amber-400">aprovação</span> na PRF.
               </h1>
 
               {/* Precise Subheadline */}

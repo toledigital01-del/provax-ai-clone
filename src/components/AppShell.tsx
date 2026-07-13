@@ -62,7 +62,7 @@ export default function AppShell({
   // Fechar search com Escape
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { setSearchOpen(false); setSearchQuery(''); }
+      if (e.key === 'Escape') { setSearchOpen(false); setSearchQuery(''); setNotifOpen(false); }
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); setSearchOpen(s => !s); }
     };
     window.addEventListener('keydown', handler);
@@ -80,8 +80,8 @@ export default function AppShell({
   const sidebarBorder = isDark ? 'border-white/[0.06]' : 'border-slate-200';
   const headerBg = isDark ? 'bg-[#080b14]/80' : 'bg-white/80';
   const navActive = isDark
-    ? 'bg-indigo-600/15 text-white border-r-2 border-indigo-500'
-    : 'bg-indigo-50 text-indigo-700 border-r-2 border-indigo-600';
+    ? 'bg-indigo-600/25 text-white ring-1 ring-inset ring-indigo-500/40'
+    : 'bg-indigo-100 text-indigo-700 ring-1 ring-inset ring-indigo-400/40';
   const navIdle = isDark
     ? 'text-slate-500 hover:text-slate-200 hover:bg-white/[0.04]'
     : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100';
@@ -128,11 +128,6 @@ export default function AppShell({
 
       {/* Nav */}
       <nav className="flex-1 px-2 py-3 space-y-0.5 overflow-y-auto">
-        {(!collapsed || mobile) && (
-          <p className={`text-[10px] font-mono font-bold uppercase tracking-widest px-2 pb-2 ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>
-            Operações PRF
-          </p>
-        )}
         {NAV_ITEMS.map(item => {
           const isActive = currentTab === item.id || (item.id === 'treinar' && currentTab === 'contran');
           return (
@@ -174,7 +169,7 @@ export default function AppShell({
                 : 'text-amber-600 hover:bg-amber-50 border border-amber-200'
             }`}
           >
-            <Shield className="w-3.5 h-3.5 animate-pulse" />
+            <Shield className="w-3.5 h-3.5" />
             <span>Painel Admin IA</span>
           </button>
         </div>
@@ -245,7 +240,7 @@ export default function AppShell({
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
 
         {/* Header */}
-        <header className={`${headerBg} backdrop-blur-xl border-b ${sidebarBorder} px-4 lg:px-6 py-3 flex items-center gap-3 shrink-0 sticky top-0 z-30`}>
+        <header className={`${headerBg} border-b ${sidebarBorder} px-4 lg:px-6 py-3 flex items-center gap-3 shrink-0 sticky top-0 z-30`}>
           {/* Mobile menu trigger */}
           <button
             onClick={() => setMobileOpen(true)}
@@ -297,8 +292,14 @@ export default function AppShell({
               </button>
               {notifOpen && (
                 <div className={`absolute right-0 top-full mt-2 w-72 rounded-xl border shadow-xl z-40 ${isDark ? 'bg-[#0d1117] border-white/[0.08]' : 'bg-white border-slate-200'}`}>
-                  <div className={`px-4 py-3 border-b ${sidebarBorder}`}>
-                    <p className={`text-xs font-black uppercase tracking-widest ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>Notificações</p>
+                  <div className={`px-4 py-3 border-b ${sidebarBorder} flex items-center justify-between`}>
+                    <p className={`text-xs font-semibold ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>Notificações</p>
+                    <button
+                      onClick={() => setNotifOpen(false)}
+                      className={`p-1 rounded-md transition-colors cursor-pointer ${isDark ? 'text-slate-500 hover:text-slate-300 hover:bg-white/[0.06]' : 'text-slate-400 hover:text-slate-700 hover:bg-slate-100'}`}
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
                   </div>
                   <div className="p-4 text-center">
                     <p className={`text-xs ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>Você está em dia. Nenhuma notificação nova.</p>
@@ -316,14 +317,13 @@ export default function AppShell({
               {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-indigo-400" />}
             </button>
 
-            {/* Avatar → Meu Plano */}
-            <button
-              onClick={() => onTabChange('planos')}
-              title="Meu plano"
-              className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-600 to-indigo-800 flex items-center justify-center text-xs font-black text-white cursor-pointer shrink-0 hover:scale-105 transition-transform"
+            {/* Avatar — identidade do usuário */}
+            <div
+              title={userName}
+              className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-600 to-indigo-800 flex items-center justify-center text-xs font-black text-white shrink-0 select-none"
             >
               {userName.slice(0, 1)}
-            </button>
+            </div>
           </div>
         </header>
 
