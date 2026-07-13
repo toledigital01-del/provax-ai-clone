@@ -47,7 +47,7 @@ export default function App() {
       .single()
       .then(({ data }) => {
         if (data?.name && !onboarding) {
-          setOnboarding({
+          const profileOnboarding = {
             name: data.name,
             role: 'PRF',
             hoursPerDay: data.hours_per_day || 4,
@@ -55,13 +55,25 @@ export default function App() {
             difficulties: data.difficulties || [],
             hasDoneExam: data.has_done_exam || false,
             selectedLanguage: data.language || 'Inglês',
-          });
+          };
+          setOnboarding(profileOnboarding);
+          // Gera schedule se não existe no localStorage (login em novo dispositivo)
+          if (!schedule) {
+            setSchedule(generateClientAdaptiveSchedule(profileOnboarding));
+          }
         }
         if (data?.plan && data.plan !== 'free') {
           setSubscriptionPlan(data.plan as 'essencial' | 'premium');
         }
       });
   }, [user]);
+
+  // Garante que sempre há um schedule quando o onboarding está completo
+  useEffect(() => {
+    if (onboarding && !schedule) {
+      setSchedule(generateClientAdaptiveSchedule(onboarding));
+    }
+  }, [onboarding]);
 
   // Polling após retorno do Stripe Checkout (?success=true)
   useEffect(() => {
